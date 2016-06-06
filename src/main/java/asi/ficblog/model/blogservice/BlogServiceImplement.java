@@ -19,7 +19,9 @@ import asi.ficblog.model.enlace.Enlace;
 import asi.ficblog.model.enlace.EnlaceDAO;
 import asi.ficblog.model.entrada.Entrada;
 import asi.ficblog.model.usuario.Usuario;
+import asi.ficblog.model.util.exceptions.InputValidationException;
 import asi.ficblog.model.util.exceptions.InstanceNotFoundException;
+import asi.ficblog.model.util.validator.PropertyValidator;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_UNCOMMITTED, readOnly = false)
@@ -31,14 +33,35 @@ public class BlogServiceImplement implements BlogService {
 	private EnlaceDAO enlaceDAO;
 	@Autowired
 	private ArticuloDAO articuloDAO;
+	
+	
+	
+	public void validarBlog(Blog blog) throws InputValidationException{
+		PropertyValidator.validateMandatoryString("title", blog.getTitulo_blog());
+		PropertyValidator.validateMandatoryString("usuario", blog.getUsuario_blog());
+	}
+	
+	public void validarArticulo(Articulo articulo) throws InputValidationException{
+		PropertyValidator.validateMandatoryString("texto", articulo.getTexto_articulo());
+		PropertyValidator.validateMandatoryString("articulo", articulo.getTitulo_articulo());
+		PropertyValidator.validateInt("idBlog", articulo.getBlog_articulo());
+	}
+	
+	public void validarEnlace(Enlace enlace) throws InputValidationException{
+		PropertyValidator.validateMandatoryString("titulo", enlace.getTitulo_enlace());
+		PropertyValidator.validateMandatoryString("enlace", enlace.getUrl_enlace());
+		PropertyValidator.validateInt("idBlog", enlace.getBlog_enlace());
+	}
 
-	public Blog crearBlog(Usuario usuario_blog, String nombre_blog) {
+	public Blog crearBlog(Usuario usuario_blog, String nombre_blog) throws InputValidationException {
 		Blog blog = new Blog(nombre_blog, new Date(), usuario_blog.getLogin_usuario());
+		validarBlog(blog);
 		return blogDAO.insert(blog);
 
 	}
 
-	public Blog crearBlog(Blog blog) {
+	public Blog crearBlog(Blog blog) throws InputValidationException {
+		validarBlog(blog);
 		return blogDAO.insert(blog);
 	}
 
@@ -52,34 +75,65 @@ public class BlogServiceImplement implements BlogService {
 
 	}
 
-	public void cambiarTituloBlog(Blog blog, String nuevo_nombre) {
+	public void cambiarTituloBlog(Blog blog, String nuevo_nombre) throws InputValidationException {
 		blog.setTitulo_blog(nuevo_nombre);
+		validarBlog(blog);
 		blogDAO.update(blog);
 	}
 
-	public Articulo crearArticulo(String titulo_articulo, String texto_articulo, int id_blog) {
-		return articuloDAO.insert(new Articulo(titulo_articulo, new Date(), texto_articulo, id_blog));
+	public Articulo crearArticulo(String titulo_articulo, String texto_articulo, int id_blog) throws InputValidationException {
+		Articulo articulo= new Articulo(titulo_articulo, new Date(), texto_articulo, id_blog);
+		validarArticulo(articulo);
+		return articuloDAO.insert(articulo);
 	}
 
-	public Enlace crearEnlace(String titulo_enlace, String url_enlace, String tipo_contenido, int id_blog) {
-		return enlaceDAO.insert(new Enlace(titulo_enlace, new Date(), url_enlace, tipo_contenido, id_blog));
+	public Articulo crearArticulo(Articulo articulo)
+			throws InputValidationException {
+		validarArticulo(articulo);
+		return articuloDAO.insert(articulo);
+	}
+
+	public Enlace crearEnlace(String titulo_enlace, String url_enlace, String tipo_contenido, int id_blog) throws InputValidationException {
+		Enlace enlace = new Enlace(titulo_enlace, new Date(), url_enlace, tipo_contenido, id_blog);
+		validarEnlace(enlace);
+		return enlaceDAO.insert(enlace);
+	}
+
+	public Enlace crearEnlace(Enlace enlace) throws InputValidationException,
+			InputValidationException {
+		validarEnlace(enlace);
+		return enlaceDAO.insert(enlace);
 	}
 
 	public void modificarArticulo(String nuevo_titulo_articulo, String nuevo_texto_articulo, int id_articulo)
-			throws InstanceNotFoundException {
+			throws InstanceNotFoundException, InputValidationException {
 		Articulo articulo = articuloDAO.find(id_articulo);
 		articulo.setTitulo_articulo(nuevo_titulo_articulo);
 		articulo.setTexto_articulo(nuevo_texto_articulo);
+		validarArticulo(articulo);
 		articuloDAO.update(articulo);
 	}
 
+	public void modificarArticulo(Articulo articulo)
+			throws InstanceNotFoundException, InputValidationException {
+		validarArticulo(articulo);
+		articuloDAO.update(articulo);		
+	}
+
 	public void modificarEnlace(String titulo_enlace, String url_enlace, String tipo_contenido, int id_enlace)
-			throws InstanceNotFoundException {
+			throws InstanceNotFoundException, InputValidationException {
 		Enlace enlace = enlaceDAO.find(id_enlace);
 		enlace.setTitulo_enlace(titulo_enlace);
 		enlace.setUrl_enlace(url_enlace);
 		enlace.setTipo_contenido_enlace(tipo_contenido);
+		validarEnlace(enlace);
 		enlaceDAO.update(enlace);
+	}
+
+	public void modificarEnlace(Enlace enlace)
+			throws InstanceNotFoundException, InputValidationException {
+		validarEnlace(enlace);
+		enlaceDAO.update(enlace);		
 	}
 
 	@Transactional(readOnly = true)
@@ -116,7 +170,7 @@ public class BlogServiceImplement implements BlogService {
 		return lista_entradas;
 	}
 
-	public void eliminarArticulo(int id_articulo) {
+	public void eliminarArticulo(int id_articulo) throws InstanceNotFoundException {
 		articuloDAO.remove(id_articulo);
 
 	}
@@ -126,7 +180,7 @@ public class BlogServiceImplement implements BlogService {
 
 	}
 
-	public void eliminarEntradasBlog(int id_blog) {
+	public void eliminarEntradasBlog(int id_blog) throws InstanceNotFoundException {
 		articuloDAO.removeAll(id_blog);
 		enlaceDAO.removeAll(id_blog);
 	}

@@ -125,7 +125,7 @@ public class PostgreSQLArticuloDAO implements ArticuloDAO {
 		return articulo;
 	}
 
-	public void update(Articulo articulo) {
+	public void update(Articulo articulo) throws InstanceNotFoundException {
 		try {
 
 			Connection connection = dataSource.getConnection();
@@ -143,8 +143,10 @@ public class PostgreSQLArticuloDAO implements ArticuloDAO {
 			statement.setInt(5, articulo.getBlog_articulo());
 			statement.setInt(6, articulo.getId_articulo());
 
-			statement.executeUpdate();
-
+			int updatedRows= statement.executeUpdate();
+			if (updatedRows == 0) {
+                throw new InstanceNotFoundException();
+            }
 
 			connection.close();
 		} catch (SQLException e) {
@@ -152,7 +154,7 @@ public class PostgreSQLArticuloDAO implements ArticuloDAO {
 		}
 	}
 
-	public void remove(Integer id_articulo) {
+	public void remove(Integer id_articulo) throws InstanceNotFoundException {
 		try {
 
 			Connection connection = dataSource.getConnection();
@@ -160,7 +162,10 @@ public class PostgreSQLArticuloDAO implements ArticuloDAO {
 			PreparedStatement statement = connection.prepareStatement("DELETE FROM articulo WHERE id_articulo = ?");
 			statement.setInt(1, id_articulo);
 
-			statement.executeUpdate();
+			int removedRows=statement.executeUpdate();
+			if (removedRows == 0) {
+                throw new InstanceNotFoundException();
+            }
 
 			connection.close();
 		} catch (SQLException e) {
@@ -173,15 +178,17 @@ public class PostgreSQLArticuloDAO implements ArticuloDAO {
 		this.dataSource = dataSource;
 	}
 
-	public void removeAll(int blog_articulo) {
+	public void removeAll(int blog_articulo) throws InstanceNotFoundException {
 		try {
 
 			Connection connection = dataSource.getConnection();
 
 			PreparedStatement statement = connection.prepareStatement("DELETE FROM articulo WHERE blog_articulo = ?");
 			statement.setInt(1, blog_articulo);
-			statement.executeUpdate();
-
+			int removedRows=statement.executeUpdate();
+			if (removedRows == 0) {
+                throw new InstanceNotFoundException();
+            }
 			connection.close();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);

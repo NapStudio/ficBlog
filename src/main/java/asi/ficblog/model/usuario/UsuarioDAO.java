@@ -29,11 +29,13 @@ public interface UsuarioDAO {
 
 	/**
 	 * Actualiza la información de un asi.ficblog.model.usuario dado.
+	 * @throws InstanceNotFoundException 
 	 */
-	public abstract void update(Usuario usuario);
+	public abstract void update(Usuario usuario) throws InstanceNotFoundException;
 
 	/**
 	 * Elimina un asi.ficblog.model.usuario por su login
+	 * @throws InstanceNotFoundException 
 	 */
-	public abstract void remove(String login_usuario);
+	public abstract void remove(String login_usuario) throws InstanceNotFoundException;
 }

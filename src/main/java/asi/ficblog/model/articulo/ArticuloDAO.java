@@ -29,13 +29,14 @@ public interface ArticuloDAO {
 
 	/**
 	 * Actualiza la información de un articulo.
+	 * @throws InstanceNotFoundException 
 	 */
-	public abstract void update(Articulo articulo);
+	public abstract void update(Articulo articulo) throws InstanceNotFoundException;
 
 	/**
 	 * Elimina un articulo por su id.
 	 */
-	public abstract void remove(Integer id_articulo);
+	public abstract void remove(Integer id_articulo) throws InstanceNotFoundException;
 
-	public abstract void removeAll(int blog_articulo);
+	public abstract void removeAll(int blog_articulo) throws InstanceNotFoundException;
 }

@@ -120,7 +120,7 @@ public class PostgreSQLUsuarioDAO implements UsuarioDAO{
 		return usuario;
 	}
 	
-	public void update(Usuario usuario) {
+	public void update(Usuario usuario) throws InstanceNotFoundException {
 		
 		try {
 			
@@ -136,7 +136,10 @@ public class PostgreSQLUsuarioDAO implements UsuarioDAO{
 			statement.setString(4, usuario.getNick_usuario());
 			statement.setString(5, usuario.getLogin_usuario());
 			
-			statement.executeUpdate();
+			int updatedRows=statement.executeUpdate();
+			if(updatedRows==0){
+				throw new InstanceNotFoundException();
+			}
 
 			connection.close();
 		} catch (SQLException e) {
@@ -145,7 +148,7 @@ public class PostgreSQLUsuarioDAO implements UsuarioDAO{
 		
 	}
 	
-	public void remove(String login_usuario) {
+	public void remove(String login_usuario) throws InstanceNotFoundException {
 		try {
 			
 			Connection connection = dataSource.getConnection();
@@ -154,7 +157,10 @@ public class PostgreSQLUsuarioDAO implements UsuarioDAO{
 					"DELETE FROM usuario WHERE login_usuario = ?");
 			statement.setString(1, login_usuario);
 			
-			statement.executeUpdate();
+			int removedRows=statement.executeUpdate();
+			if(removedRows==0){
+				throw new InstanceNotFoundException();				
+			}
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
