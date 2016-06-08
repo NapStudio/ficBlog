@@ -30,8 +30,9 @@ public interface BlogDAO {
 
 	/**
 	 * Actualiza la información de un blog.
+	 * @return 
 	 */
-	public abstract void update(Blog blog);
+	public abstract Blog update(Blog blog);
 
 	/**
 	 * Elimina un blog por su id.

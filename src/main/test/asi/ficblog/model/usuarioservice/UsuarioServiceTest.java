@@ -2,7 +2,6 @@ package asi.ficblog.model.usuarioservice;
 
 
 import org.junit.Assert;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import asi.ficblog.model.usuario.Usuario;
+import asi.ficblog.model.util.exceptions.InputValidationException;
 import asi.ficblog.model.util.exceptions.InstanceNotFoundException;
 
 
@@ -28,7 +28,7 @@ public class UsuarioServiceTest {
 
 
 	@Test
-	public void testFindbyLogin() throws InstanceNotFoundException {
+	public void testFindbyLogin() throws InstanceNotFoundException, InputValidationException {
 		
 		Usuario usuario = new Usuario("Alejandro", "Vazquez","avazquez","123456", "alej");
 		
@@ -46,7 +46,7 @@ public class UsuarioServiceTest {
 	}
 	
 	@Test
-	public void testModificarUsuario() throws InstanceNotFoundException {
+	public void testModificarUsuario() throws InstanceNotFoundException, InputValidationException {
 		
 		Usuario usuario = new Usuario("Alejandro", "Vazquez","avazquez","123456", "alej");
 		
@@ -68,7 +68,7 @@ public class UsuarioServiceTest {
 	}
 	
 	@Test(expected=InstanceNotFoundException.class)
-	public void testEliminarUsuario() throws InstanceNotFoundException {
+	public void testEliminarUsuario() throws InstanceNotFoundException, InputValidationException {
 		
 		Usuario usuario = new Usuario("Alejandro", "Vazquez","avazquez","123456", "alej");	
 		usuarioService.registrarUsuario(usuario);

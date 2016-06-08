@@ -6,17 +6,20 @@ import asi.ficblog.model.entrada.Entrada;
 
 public class Enlace extends Entrada{
 	
-	private int id_enlace;
+	private Long id_enlace;
 	private String titulo_enlace;
 	private Date fecha_publicacion_enlace;
 	private String url_enlace;
 	private String tipo_contenido_enlace;
-	private int blog_enlace;
+	private Long blog_enlace;
 	
+	public Enlace(){
+		
+	}
 	
 
-	public Enlace(int id_enlace, String titulo_enlace, Date fecha_publicacion_enlace, String url_enlace,
-			String tipo_contenido, boolean me_gusta_enlace, int blog_enlace) {
+	public Enlace(Long id_enlace, String titulo_enlace, Date fecha_publicacion_enlace, String url_enlace,
+			String tipo_contenido, boolean me_gusta_enlace, Long blog_enlace) {
 		super(fecha_publicacion_enlace, me_gusta_enlace);
 		this.id_enlace = id_enlace;
 		this.titulo_enlace = titulo_enlace;
@@ -27,7 +30,7 @@ public class Enlace extends Entrada{
 	}
 	
 	public Enlace(String titulo_enlace, Date fecha_publicacion_enlace, String url_enlace,
-			String tipo_contenido, int blog_enlace) {
+			String tipo_contenido, Long blog_enlace) {
 		super(fecha_publicacion_enlace);
 		this.titulo_enlace = titulo_enlace;
 		this.fecha_publicacion_enlace = fecha_publicacion_enlace;
@@ -37,19 +40,19 @@ public class Enlace extends Entrada{
 	}
 
 
-	public int getBlog_enlace() {
+	public Long getBlog_enlace() {
 		return blog_enlace;
 	}
 
-	public void setBlog_enlace(int blog_enlace) {
+	public void setBlog_enlace(Long blog_enlace) {
 		this.blog_enlace = blog_enlace;
 	}
 
-	public int getId_enlace() {
+	public Long getId_enlace() {
 		return id_enlace;
 	}
 
-	public void setId_enlace(int id_enlace) {
+	public void setId_enlace(Long id_enlace) {
 		this.id_enlace = id_enlace;
 	}
 
@@ -95,12 +98,22 @@ public class Enlace extends Entrada{
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + blog_enlace;
-		result = prime * result + ((fecha_publicacion_enlace == null) ? 0 : fecha_publicacion_enlace.hashCode());
-		result = prime * result + id_enlace;
-		result = prime * result + ((tipo_contenido_enlace == null) ? 0 : tipo_contenido_enlace.hashCode());
-		result = prime * result + ((titulo_enlace == null) ? 0 : titulo_enlace.hashCode());
-		result = prime * result + ((url_enlace == null) ? 0 : url_enlace.hashCode());
+		result = prime * result
+				+ ((blog_enlace == null) ? 0 : blog_enlace.hashCode());
+		result = prime
+				* result
+				+ ((fecha_publicacion_enlace == null) ? 0
+						: fecha_publicacion_enlace.hashCode());
+		result = prime * result
+				+ ((id_enlace == null) ? 0 : id_enlace.hashCode());
+		result = prime
+				* result
+				+ ((tipo_contenido_enlace == null) ? 0 : tipo_contenido_enlace
+						.hashCode());
+		result = prime * result
+				+ ((titulo_enlace == null) ? 0 : titulo_enlace.hashCode());
+		result = prime * result
+				+ ((url_enlace == null) ? 0 : url_enlace.hashCode());
 		return result;
 	}
 
@@ -113,14 +126,21 @@ public class Enlace extends Entrada{
 		if (getClass() != obj.getClass())
 			return false;
 		Enlace other = (Enlace) obj;
-		if (blog_enlace != other.blog_enlace)
+		if (blog_enlace == null) {
+			if (other.blog_enlace != null)
+				return false;
+		} else if (!blog_enlace.equals(other.blog_enlace))
 			return false;
 		if (fecha_publicacion_enlace == null) {
 			if (other.fecha_publicacion_enlace != null)
 				return false;
-		} else if (!fecha_publicacion_enlace.equals(other.fecha_publicacion_enlace))
+		} else if (!fecha_publicacion_enlace
+				.equals(other.fecha_publicacion_enlace))
 			return false;
-		if (id_enlace != other.id_enlace)
+		if (id_enlace == null) {
+			if (other.id_enlace != null)
+				return false;
+		} else if (!id_enlace.equals(other.id_enlace))
 			return false;
 		if (tipo_contenido_enlace == null) {
 			if (other.tipo_contenido_enlace != null)
@@ -139,6 +159,8 @@ public class Enlace extends Entrada{
 			return false;
 		return true;
 	}
+
+
 	
 	
 

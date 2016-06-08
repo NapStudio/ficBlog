@@ -1,198 +1,120 @@
 package asi.ficblog.model.articulo;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.List;
 
-import javax.sql.DataSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import asi.ficblog.model.util.exceptions.InstanceNotFoundException;
 
 public class PostgreSQLArticuloDAO implements ArticuloDAO {
+	
+	private NamedParameterJdbcOperations jdbcTemplate;
+		
+	public void setJdbcTemplate(NamedParameterJdbcOperations jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 
-	private DataSource dataSource;
+	private static String CREATE_SQL =
+	"INSERT INTO articulo (titulo_articulo, fecha_publicacion_articulo, texto_articulo, me_gusta_articulo, blog_articulo ) "
+	+ "VALUES (:titulo_articulo, :fecha_publicacion_articulo, :texto_articulo, :me_gusta_articulo, :blog_articulo )";
+	
+	
+	private static String UPDATE_SQL =
+	"UPDATE articulo SET titulo_articulo = :titulo_articulo, fecha_publicacion_articulo = :fecha_publicacion_articulo, "
+	+ "texto_articulo = :texto_articulo, me_gusta_articulo = :me_gusta_articulo, blog_articulo = :blog_articulo "
+	+ "WHERE id_articulo = :id_articulo";
+	
+	private static String GET_BYBLOG_SQL = 
+	"SELECT id_articulo, titulo_articulo, fecha_publicacion_articulo, texto_articulo, me_gusta_articulo, blog_articulo "
+	+ "FROM articulo "
+	+ "WHERE blog_articulo = :blog_articulo";
+	
+	private static String GET_SQL = 
+	"SELECT id_articulo, titulo_articulo, fecha_publicacion_articulo, texto_articulo, me_gusta_articulo, blog_articulo "
+	+ "FROM articulo "
+	+ "WHERE id_articulo = :id_articulo";
+
+	
+	private static String DELETE_ALL_SQL =
+		"DELETE FROM articulo WHERE blog_articulo = :blog_articulo";
+	
+	private static String DELETE_SQL =
+			"DELETE FROM articulo WHERE id_articulo = :id_articulo";
+	
+
+	public Articulo insert(Articulo articulo) {
+	
+		SqlParameterSource params = new MapSqlParameterSource().
+				addValue("titulo_articulo", articulo.getTitulo_articulo()).
+				addValue("fecha_publicacion_articulo", articulo.getFecha_publicacion_articulo()).
+				addValue("texto_articulo", articulo.getTexto_articulo()).
+				addValue("me_gusta_articulo", articulo.isMe_gusta_entrada()).
+				addValue("blog_articulo", articulo.getBlog_articulo());
+			
+			KeyHolder keyHolder = new GeneratedKeyHolder();
+			
+			jdbcTemplate.update(CREATE_SQL, params, keyHolder, new String [] {"id"});
+			
+			articulo.setId_articulo(keyHolder.getKey().longValue());
+			
+			return articulo;
+		
+	}
+	
+	public Articulo update(Articulo articulo) throws InstanceNotFoundException {
+			SqlParameterSource params = new MapSqlParameterSource().
+				addValue("titulo_articulo", articulo.getTitulo_articulo()).
+				addValue("fecha_publicacion_articulo", articulo.getFecha_publicacion_articulo()).
+				addValue("texto_articulo", articulo.getTexto_articulo()).
+				addValue("me_gusta_articulo", articulo.isMe_gusta_entrada()).
+				addValue("blog_articulo", articulo.getBlog_articulo());
+			
+			jdbcTemplate.update(UPDATE_SQL, params);
+			
+			return articulo;
+	}
 
 	public Articulo find(Integer id_articulo) throws InstanceNotFoundException {
-		Articulo articulo = null;
-
-		try {
-			Connection connection = dataSource.getConnection();
-
-			PreparedStatement statement = connection.prepareStatement(
-					"SELECT titulo_articulo, fecha_publicacion_articulo, texto_articulo, me_gusta_articulo, blog_articulo FROM articulo WHERE id_articulo = ?");
-			statement.setInt(1, id_articulo);
-
-			ResultSet resultSet = statement.executeQuery();
-
-			if (resultSet.next()) {
-				String titulo_articulo = resultSet.getString(1);
-				Date fecha_publicacion_articulo = resultSet.getTimestamp(2);
-				String texto_articulo = resultSet.getString(3);
-				boolean me_gusta_articulo=resultSet.getBoolean(4);
-				int blog_articulo = resultSet.getInt(5);
-
-				articulo = new Articulo(id_articulo, titulo_articulo, fecha_publicacion_articulo, texto_articulo, me_gusta_articulo,
-						blog_articulo);
-			} else {
-				connection.close();
-				throw new InstanceNotFoundException();
-			}
-			connection.close();
-
-		} catch (SQLException e) {	
-			throw new RuntimeException(e);
-		}
-
-		return articulo;
+		SqlParameterSource params = new MapSqlParameterSource().
+				addValue("id_articulo", id_articulo);
+		
+		return jdbcTemplate.queryForObject(GET_SQL, params,new ArticuloRowMapper());
+		
+		
+		
 	}
 
 	public List<Articulo> findByBlog(int blog_articulo) throws InstanceNotFoundException {
-		List<Articulo> list = new ArrayList<Articulo>();
-
-		try {
-
-			Connection connection = dataSource.getConnection();
-			PreparedStatement statement = connection.prepareStatement(
-					"SELECT id_articulo, titulo_articulo, fecha_publicacion_articulo, texto_articulo, me_gusta_articulo, blog_articulo "
-							+ "FROM articulo WHERE blog_articulo = ?");
-
-			statement.setInt(1, blog_articulo);
-
-			ResultSet resultSet = statement.executeQuery();
-
-			while (resultSet.next()) {
-
-				list.add(new Articulo(resultSet.getInt(1), // id_articulo
-						resultSet.getString(2), // titulo_articulo
-						resultSet.getTimestamp(3), // fecha_publicacion_articulo
-						resultSet.getString(4), // texto_articulo
-						resultSet.getBoolean(5), // me_gusta_articulo
-						resultSet.getInt(6))// blog_articulo
-				);
-
-			}
-
-			connection.close();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-
-		return list;
-	}
-
-	public Articulo insert(Articulo articulo) {
-		if (articulo == null)
-			return null;
+		SqlParameterSource params = new MapSqlParameterSource().
+				addValue("blog_articulo", blog_articulo);
+		return jdbcTemplate.query(GET_BYBLOG_SQL, params, new ArticuloRowMapper());
 		
-		java.sql.Timestamp sqlTimestamp = new java.sql.Timestamp(articulo.getFecha_publicacion_articulo().getTime());
-		articulo.setFecha_publicacion_articulo(sqlTimestamp);
-		try {
-
-			Connection connection = dataSource.getConnection();
-
-			PreparedStatement statement = connection.prepareStatement(
-					"INSERT INTO articulo (titulo_articulo, fecha_publicacion_articulo, texto_articulo, me_gusta_articulo, blog_articulo ) "
-							+ "VALUES (?, ?, ?, ?, ?)",
-					Statement.RETURN_GENERATED_KEYS);
-
-			statement.setString(1, articulo.getTitulo_articulo());
-			statement.setTimestamp(2, sqlTimestamp);
-			statement.setString(3, articulo.getTexto_articulo());
-			statement.setBoolean(4, articulo.isMe_gusta_entrada());
-			statement.setInt(5, articulo.getBlog_articulo());
-
-			statement.executeUpdate();
-
-			ResultSet resultSet = statement.getGeneratedKeys();
-
-
-			if (resultSet != null && resultSet.next())
-				articulo.setId_articulo(resultSet.getInt(1));
-			
-
-			connection.close();
-
-		} catch (SQLException e) {
-			
-			throw new RuntimeException(e);
-		}
-
-		return articulo;
+		
 	}
 
-	public void update(Articulo articulo) throws InstanceNotFoundException {
-		try {
-
-			Connection connection = dataSource.getConnection();
-			PreparedStatement statement = connection.prepareStatement(
-					"UPDATE articulo SET titulo_articulo = ?, fecha_publicacion_articulo = ?, texto_articulo = ?, me_gusta_articulo = ?, blog_articulo = ? "
-							+ "WHERE id_articulo = ?");
-			
-			java.sql.Timestamp sqlTimestamp = new java.sql.Timestamp(articulo.getFecha_publicacion_articulo().getTime());
-			articulo.setFecha_publicacion_articulo(sqlTimestamp);
-
-			statement.setString(1, articulo.getTitulo_articulo());
-			statement.setTimestamp(2, sqlTimestamp);
-			statement.setString(3, articulo.getTexto_articulo());
-			statement.setBoolean(4, articulo.isMe_gusta_entrada());
-			statement.setInt(5, articulo.getBlog_articulo());
-			statement.setInt(6, articulo.getId_articulo());
-
-			int updatedRows= statement.executeUpdate();
-			if (updatedRows == 0) {
-                throw new InstanceNotFoundException();
-            }
-
-			connection.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
 
 	public void remove(Integer id_articulo) throws InstanceNotFoundException {
-		try {
+		
+		SqlParameterSource params = new MapSqlParameterSource().
+				addValue("id_articulo", id_articulo);
+		
+		jdbcTemplate.update(DELETE_SQL, params);
+		
+		
 
-			Connection connection = dataSource.getConnection();
-
-			PreparedStatement statement = connection.prepareStatement("DELETE FROM articulo WHERE id_articulo = ?");
-			statement.setInt(1, id_articulo);
-
-			int removedRows=statement.executeUpdate();
-			if (removedRows == 0) {
-                throw new InstanceNotFoundException();
-            }
-
-			connection.close();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-
-	}
-
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
 	}
 
 	public void removeAll(int blog_articulo) throws InstanceNotFoundException {
-		try {
-
-			Connection connection = dataSource.getConnection();
-
-			PreparedStatement statement = connection.prepareStatement("DELETE FROM articulo WHERE blog_articulo = ?");
-			statement.setInt(1, blog_articulo);
-			int removedRows=statement.executeUpdate();
-			if (removedRows == 0) {
-                throw new InstanceNotFoundException();
-            }
-			connection.close();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
+		SqlParameterSource params = new MapSqlParameterSource().
+				addValue("blog_articulo", blog_articulo);;
+		
+		jdbcTemplate.update(DELETE_ALL_SQL, params);
+		
 	}
 
 }

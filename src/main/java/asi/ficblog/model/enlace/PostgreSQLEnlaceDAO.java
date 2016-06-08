@@ -1,195 +1,112 @@
 package asi.ficblog.model.enlace;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import javax.sql.DataSource;
+
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import asi.ficblog.model.util.exceptions.InstanceNotFoundException;
 
 public class PostgreSQLEnlaceDAO implements EnlaceDAO {
 
-	private DataSource dataSource;
+	private NamedParameterJdbcOperations jdbcTemplate;
+	
+	public void setJdbcTemplate(NamedParameterJdbcOperations jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 
+	private static String CREATE_SQL =
+	"INSERT INTO enlace (titulo_enlace, fecha_publicacion_enlace, url_enlace, tipo_contenido_enlace, me_gusta_enlace, blog_enlace) "
+	+ "VALUES (:titulo_enlace, :fecha_publicacion_enlace, :url_enlace, :tipo_contenido_enlace, :me_gusta_enlace, :blog_enlace)";
+	
+	private static String UPDATE_SQL =
+	"UPDATE enlace SET titulo_enlace = :titulo_enlace, fecha_publicacion_enlace = :fecha_publicacion_enlace, url_enlace = :url_enlace,"
+	+ " tipo_contenido_enlace = :tipo_contenido_enlace, me_gusta_enlace = :me_gusta_enlace, blog_enlace = :blog_enlace "
+	+ "WHERE id_enlace = :id_enlace";
+	
+	private static String GET_BYBLOG_SQL = 
+	"SELECT id_enlace, titulo_enlace, fecha_publicacion_enlace, url_enlace, tipo_contenido_enlace, me_gusta_enlace, blog_enlace "
+	+ "FROM enlace "
+	+ "WHERE blog_enlace = :blog_enlace";
+	
+	private static String GET_SQL = 
+	"SELECT titulo_enlace, fecha_publicacion_enlace, url_enlace, tipo_contenido_enlace, me_gusta_enlace, blog_enlace "
+	+ "FROM enlace "
+	+ "WHERE id_enlace = :id_enlace";
+
+	
+	private static String DELETE_ALL_SQL =
+	"DELETE FROM enlace WHERE blog_enlace = :blog_enlace";
+	
+	private static String DELETE_SQL =
+	"DELETE FROM enlace WHERE id_enlace = :id_enlace";
+	
+	
+	
+
+	public Enlace insert(Enlace enlace) {
+		
+		SqlParameterSource params = new MapSqlParameterSource().
+				addValue("titulo_enlace", enlace.getTitulo_enlace()).
+				addValue("fecha_publicacion_enlace", enlace.getFecha_publicacion_enlace()).
+				addValue("url_enlace", enlace.getUrl_enlace()).
+				addValue("me_gusta_enlace", enlace.isMe_gusta_entrada()).
+				addValue("tipo_contenido_enlace", enlace.getTipo_contenido_enlace()).
+				addValue("blog_enlace", enlace.getBlog_enlace());
+			
+			KeyHolder keyHolder = new GeneratedKeyHolder();
+			
+			jdbcTemplate.update(CREATE_SQL, params, keyHolder, new String [] {"id"});
+			
+			enlace.setId_enlace(keyHolder.getKey().longValue());
+			
+			return enlace;
+	}
+
+
+	public Enlace update(Enlace enlace) {
+		SqlParameterSource params = new MapSqlParameterSource().
+				addValue("titulo_enlace", enlace.getTitulo_enlace()).
+				addValue("fecha_publicacion_enlace", enlace.getFecha_publicacion_enlace()).
+				addValue("url_enlace", enlace.getUrl_enlace()).
+				addValue("me_gusta_enlace", enlace.isMe_gusta_entrada()).
+				addValue("tipo_contenido_enlace", enlace.getTipo_contenido_enlace()).
+				addValue("blog_enlace", enlace.getBlog_enlace());
+			
+			jdbcTemplate.update(UPDATE_SQL, params);
+			
+			return enlace;
+	}
+	
 	public Enlace find(Integer id_enlace) throws InstanceNotFoundException {
-		Enlace enlace = null;
-
-		try {
-			Connection connection = dataSource.getConnection();
-
-			PreparedStatement statement = connection.prepareStatement(
-					"SELECT titulo_enlace, fecha_publicacion_enlace, url_enlace, tipo_contenido_enlace, me_gusta_enlace, blog_enlace FROM enlace WHERE id_enlace = ?");
-			statement.setInt(1, id_enlace);
-
-			ResultSet resultSet = statement.executeQuery();
-
-			if (resultSet.next()) {
-				String titulo_enlace = resultSet.getString(1);
-				Date fecha_publicacion_enlace = resultSet.getTimestamp(2);
-				String url_enlace = resultSet.getString(3);
-				String tipo_contenido_enlace = resultSet.getString(4);
-				Boolean me_gusta_enlace = resultSet.getBoolean(5);
-				int blog_enlace = resultSet.getInt(6);
-
-				enlace = new Enlace(id_enlace, titulo_enlace, fecha_publicacion_enlace, url_enlace,
-						tipo_contenido_enlace, me_gusta_enlace, blog_enlace);
-
-				connection.close();
-			} else {
-
-				connection.close();
-				throw new InstanceNotFoundException();
-			}
-
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-
-		return enlace;
+		SqlParameterSource params = new MapSqlParameterSource().
+				addValue("id_enlace", id_enlace);
+		
+		return jdbcTemplate.queryForObject(GET_SQL, params,new EnlaceRowMapper());
 	}
 
 	public List<Enlace> findByBlog(int blog_enlace) throws InstanceNotFoundException {
-		List<Enlace> list = new ArrayList<Enlace>();
-
-		try {
-
-			Connection connection = dataSource.getConnection();
-			PreparedStatement statement = connection.prepareStatement(
-					"SELECT id_enlace, titulo_enlace, fecha_publicacion_enlace, url_enlace, tipo_contenido_enlace, me_gusta_enlace, blog_enlace "
-							+ "FROM enlace WHERE blog_enlace = ?");
-
-			statement.setInt(1, blog_enlace);
-
-			ResultSet resultSet = statement.executeQuery();
-
-			while (resultSet.next()) {
-
-				list.add(new Enlace(resultSet.getInt(1), // id_enlace
-						resultSet.getString(2), // titulo_enlace
-						resultSet.getTimestamp(3), // fecha_publicacion_enlace
-						resultSet.getString(4), // url_enlace
-						resultSet.getString(5), // tipo_contenido_enlace
-						resultSet.getBoolean(6), // me_gusta_enlace
-						resultSet.getInt(7))// blog_enlace
-				);
-
-			}
-
-			connection.close();
-		} catch (SQLException e) {
-			
-			throw new RuntimeException(e);
-		}
-
-		return list;
+		SqlParameterSource params = new MapSqlParameterSource().
+				addValue("blog_enlace", blog_enlace);
+		return jdbcTemplate.query(GET_BYBLOG_SQL, params, new EnlaceRowMapper());
 	}
-
-	public Enlace insert(Enlace enlace) {
-		if (enlace == null)
-			return null;
-
-		java.sql.Timestamp sqlTimestamp = new java.sql.Timestamp(enlace.getFecha_publicacion_enlace().getTime());
-		enlace.setFecha_publicacion_enlace(sqlTimestamp);
-
-		try {
-
-			Connection connection = dataSource.getConnection();
-
-			PreparedStatement statement = connection.prepareStatement(
-					"INSERT INTO enlace (titulo_enlace, fecha_publicacion_enlace, url_enlace, tipo_contenido_enlace, me_gusta_enlace, blog_enlace) "
-							+ "VALUES (?, ?, ?, ?, ?, ?)",
-					Statement.RETURN_GENERATED_KEYS);
-
-			statement.setString(1, enlace.getTitulo_enlace());
-			statement.setTimestamp(2, sqlTimestamp);
-			statement.setString(3, enlace.getUrl_enlace());
-			statement.setString(4, enlace.getTipo_contenido_enlace());
-			statement.setBoolean(5, enlace.isMe_gusta_entrada());
-			statement.setInt(6, enlace.getBlog_enlace());
-
-			statement.executeUpdate();
-
-			ResultSet resultSet = statement.getGeneratedKeys();
-
-			if (resultSet != null && resultSet.next())
-				enlace.setId_enlace(resultSet.getInt(1));
-
-			connection.close();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-
-		return enlace;
-	}
-
-	public void update(Enlace enlace) {
-		try {
-			// TODO; preguntar se no update podese cambiar o ID;
-			Connection connection = dataSource.getConnection();
-			PreparedStatement statement = connection.prepareStatement(
-					"UPDATE enlace SET titulo_enlace = ?, fecha_publicacion_enlace = ?, url_enlace = ?, tipo_contenido_enlace = ?, me_gusta_enlace = ?, blog_enlace = ? "
-							+ "WHERE id_enlace = ?");
-
-			java.sql.Timestamp sqlTimestamp = new java.sql.Timestamp(enlace.getFecha_publicacion_enlace().getTime());
-
-			statement.setString(1, enlace.getTitulo_enlace());
-			statement.setTimestamp(2, sqlTimestamp);
-			statement.setString(3, enlace.getUrl_enlace());
-			statement.setString(4, enlace.getTipo_contenido_enlace());
-			statement.setBoolean(5, enlace.isMe_gusta_entrada());
-			statement.setInt(6, enlace.getBlog_enlace());
-			statement.setInt(7, enlace.getId_enlace());
-
-			statement.executeUpdate();
-
-			connection.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-	}
-
+	
 	public void remove(Integer id_enlace) {
-		try {
-
-			Connection connection = dataSource.getConnection();
-
-			PreparedStatement statement = connection.prepareStatement("DELETE FROM enlace WHERE id_enlace = ?");
-			statement.setInt(1, id_enlace);
-
-			statement.executeUpdate();
-
-			connection.close();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-
-	}
-
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
+		SqlParameterSource params = new MapSqlParameterSource().
+				addValue("id_enlace", id_enlace);
+		
+		jdbcTemplate.update(DELETE_SQL, params);
 	}
 
 	public void removeAll(int blog_enlace) {
-		try {
-
-			Connection connection = dataSource.getConnection();
-
-			PreparedStatement statement = connection.prepareStatement("DELETE FROM enlace WHERE blog_enlace = ?");
-			statement.setInt(1, blog_enlace);
-			statement.executeUpdate();
-
-			connection.close();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-
+		SqlParameterSource params = new MapSqlParameterSource().
+				addValue("blog_enlace", blog_enlace);;
+		
+		jdbcTemplate.update(DELETE_ALL_SQL, params);
 	}
 
 }

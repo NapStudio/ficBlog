@@ -19,6 +19,7 @@ import asi.ficblog.model.enlace.Enlace;
 import asi.ficblog.model.entrada.Entrada;
 import asi.ficblog.model.usuario.Usuario;
 import asi.ficblog.model.usuarioservice.UsuarioService;
+import asi.ficblog.model.util.exceptions.InputValidationException;
 import asi.ficblog.model.util.exceptions.InstanceNotFoundException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -33,7 +34,7 @@ public class BlogServiceTest {
 	private UsuarioService usuarioService;
 
 	@Test
-	public void testCrearBlog() throws InstanceNotFoundException {
+	public void testCrearBlog() throws InstanceNotFoundException, InputValidationException {
 
 		Blog blog = null;
 		try {
@@ -47,7 +48,7 @@ public class BlogServiceTest {
 	}
 
 	@Test
-	public void testBuscarBlog() throws InstanceNotFoundException {
+	public void testBuscarBlog() throws InstanceNotFoundException, InputValidationException {
 
 		Blog blog = null;
 		try {
@@ -62,7 +63,7 @@ public class BlogServiceTest {
 	}
 
 	@Test(expected = InstanceNotFoundException.class)
-	public void testEliminarBlog() throws InstanceNotFoundException {
+	public void testEliminarBlog() throws InstanceNotFoundException, InputValidationException {
 		Blog blog = null;
 		Usuario usuario = usuarioService.findUsuarioByLogin("chrisgomez");
 		blog = blogService.crearBlog(usuario, "Test blog");
@@ -72,7 +73,7 @@ public class BlogServiceTest {
 	}
 
 	@Test
-	public void testCambiarTituloBlog() throws InstanceNotFoundException {
+	public void testCambiarTituloBlog() throws InstanceNotFoundException, InputValidationException {
 		Blog blog = null;
 		Usuario usuario = usuarioService.findUsuarioByLogin("chrisgomez");
 		blog = blogService.crearBlog(usuario, "Test blog");
@@ -84,7 +85,7 @@ public class BlogServiceTest {
 	}
 
 	@Test
-	public void testCrearArticulo() throws InstanceNotFoundException {
+	public void testCrearArticulo() throws InstanceNotFoundException, InputValidationException {
 		Blog blog = null;
 		Articulo articulo = null;
 		try {
@@ -97,7 +98,7 @@ public class BlogServiceTest {
 	}
 
 	@Test
-	public void testCrearEnlace() throws InstanceNotFoundException {
+	public void testCrearEnlace() throws InstanceNotFoundException, InputValidationException {
 		Blog blog = null;
 		Enlace enlace = null;
 		try {
@@ -110,7 +111,7 @@ public class BlogServiceTest {
 	}
 
 	@Test
-	public void testModificarArticulo() throws InstanceNotFoundException {
+	public void testModificarArticulo() throws InstanceNotFoundException, InputValidationException {
 		Articulo articulo = null;
 		try {
 			Blog blog = blogService.buscarBlog(7369);
@@ -126,7 +127,7 @@ public class BlogServiceTest {
 	}
 
 	@Test
-	public void testModificarEnlace() throws InstanceNotFoundException {
+	public void testModificarEnlace() throws InstanceNotFoundException, InputValidationException {
 		Enlace enlace = null;
 		try {
 			Blog blog = blogService.buscarBlog(7369);
@@ -143,7 +144,7 @@ public class BlogServiceTest {
 	}
 
 	@Test(expected = InstanceNotFoundException.class)
-	public void testEliminarArticulo() throws InstanceNotFoundException {
+	public void testEliminarArticulo() throws InstanceNotFoundException, InputValidationException {
 		Blog blog = blogService.buscarBlog(7369);
 		Articulo articulo = blogService.crearArticulo("prueba 1", "esta es la prueba", blog.getId_blog());
 		blogService.eliminarArticulo(articulo.getId_articulo());
@@ -151,7 +152,7 @@ public class BlogServiceTest {
 	}
 
 	@Test(expected = InstanceNotFoundException.class)
-	public void testEliminarEnlace() throws InstanceNotFoundException {
+	public void testEliminarEnlace() throws InstanceNotFoundException, InputValidationException {
 		Blog blog = blogService.buscarBlog(7369);
 		Enlace enlace = blogService.crearEnlace("prueba 1", "www.prueba.com", "video", blog.getId_blog());
 		blogService.eliminarEnlace(enlace.getId_enlace());
@@ -159,7 +160,7 @@ public class BlogServiceTest {
 	}
 
 	@Test
-	public void testGetEntradas() throws InstanceNotFoundException {
+	public void testGetEntradas() throws InstanceNotFoundException, InputValidationException {
 		Blog blog1 = blogService.buscarBlog(7566);
 		try {
 
@@ -196,7 +197,7 @@ public class BlogServiceTest {
 	}
 
 	@Test
-	public void testGetBlogs() throws InstanceNotFoundException {
+	public void testGetBlogs() throws InstanceNotFoundException, InputValidationException {
 		Blog blog1 = null;
 		Blog blog2 = null;
 		Blog blog3 = null;

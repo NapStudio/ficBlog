@@ -24,8 +24,8 @@ import asi.ficblog.model.util.exceptions.InstanceNotFoundException;
 import asi.ficblog.model.util.validator.PropertyValidator;
 
 @Service
-@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_UNCOMMITTED, readOnly = false)
-public class BlogServiceImplement implements BlogService {
+@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, readOnly = false)
+public class BlogServiceImpl implements BlogService {
 
 	@Autowired
 	private BlogDAO blogDAO;
@@ -104,7 +104,7 @@ public class BlogServiceImplement implements BlogService {
 		validarEnlace(enlace);
 		return enlaceDAO.insert(enlace);
 	}
-
+	@Transactional(isolation=Isolation.SERIALIZABLE)
 	public void modificarArticulo(String nuevo_titulo_articulo, String nuevo_texto_articulo, int id_articulo)
 			throws InstanceNotFoundException, InputValidationException {
 		Articulo articulo = articuloDAO.find(id_articulo);
@@ -113,13 +113,15 @@ public class BlogServiceImplement implements BlogService {
 		validarArticulo(articulo);
 		articuloDAO.update(articulo);
 	}
-
+	
+	@Transactional(isolation=Isolation.SERIALIZABLE)
 	public void modificarArticulo(Articulo articulo)
 			throws InstanceNotFoundException, InputValidationException {
 		validarArticulo(articulo);
 		articuloDAO.update(articulo);		
 	}
-
+	
+	@Transactional(isolation=Isolation.SERIALIZABLE)
 	public void modificarEnlace(String titulo_enlace, String url_enlace, String tipo_contenido, int id_enlace)
 			throws InstanceNotFoundException, InputValidationException {
 		Enlace enlace = enlaceDAO.find(id_enlace);
@@ -129,7 +131,8 @@ public class BlogServiceImplement implements BlogService {
 		validarEnlace(enlace);
 		enlaceDAO.update(enlace);
 	}
-
+	
+	@Transactional(isolation=Isolation.SERIALIZABLE)
 	public void modificarEnlace(Enlace enlace)
 			throws InstanceNotFoundException, InputValidationException {
 		validarEnlace(enlace);

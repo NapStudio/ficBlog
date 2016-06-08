@@ -29,9 +29,10 @@ public interface UsuarioDAO {
 
 	/**
 	 * Actualiza la información de un asi.ficblog.model.usuario dado.
+	 * @return 
 	 * @throws InstanceNotFoundException 
 	 */
-	public abstract void update(Usuario usuario) throws InstanceNotFoundException;
+	public abstract Usuario update(Usuario usuario) throws InstanceNotFoundException;
 
 	/**
 	 * Elimina un asi.ficblog.model.usuario por su login

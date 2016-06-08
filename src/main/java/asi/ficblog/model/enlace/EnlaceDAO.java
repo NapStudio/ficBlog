@@ -29,8 +29,9 @@ public interface EnlaceDAO {
 
 	/**
 	 * Actualiza la información de un enlace.
+	 * @return 
 	 */
-	public abstract void update(Enlace enlace);
+	public abstract Enlace update(Enlace enlace);
 
 	/**
 	 * Elimina un enlace por su id.

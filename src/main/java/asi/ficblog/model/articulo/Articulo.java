@@ -6,15 +6,19 @@ import asi.ficblog.model.entrada.Entrada;
 
 public class Articulo extends Entrada{
 	
-	private int id_articulo;
+	private Long id_articulo;
 	private String titulo_articulo;
 	private Date fecha_publicacion_articulo;
 	private String texto_articulo;
-	private int blog_articulo;
+	private Long blog_articulo;
+	
+	public Articulo(){
+		
+	}
 	
 	
-	public Articulo(int id_articulo, String titulo_articulo, Date fecha_publicacion_articulo, String texto_articulo, boolean me_gusta_articulo,
-			int blog_articulo) {
+	public Articulo(Long id_articulo, String titulo_articulo, Date fecha_publicacion_articulo, String texto_articulo, boolean me_gusta_articulo,
+			Long blog_articulo) {
 		super(fecha_publicacion_articulo, me_gusta_articulo);
 		this.id_articulo = id_articulo;
 		this.titulo_articulo = titulo_articulo;
@@ -25,7 +29,7 @@ public class Articulo extends Entrada{
 
 	
 	public Articulo(String titulo_articulo, Date fecha_publicacion_articulo, String texto_articulo,
-			int blog_articulo) {
+			Long blog_articulo) {
 		super(fecha_publicacion_articulo);
 		this.titulo_articulo = titulo_articulo;
 		this.fecha_publicacion_articulo = fecha_publicacion_articulo;
@@ -33,12 +37,12 @@ public class Articulo extends Entrada{
 		this.blog_articulo = blog_articulo;
 	}
 
-	public int getId_articulo() {
+	public long getId_articulo() {
 		return id_articulo;
 	}
 
 
-	public void setId_articulo(int id_articulo) {
+	public void setId_articulo(Long id_articulo) {
 		this.id_articulo = id_articulo;
 	}
 
@@ -73,12 +77,12 @@ public class Articulo extends Entrada{
 	}
 
 
-	public int getBlog_articulo() {
+	public Long getBlog_articulo() {
 		return blog_articulo;
 	}
 
 
-	public void setBlog_articulo(int blog_articulo) {
+	public void setBlog_articulo(Long blog_articulo) {
 		this.blog_articulo = blog_articulo;
 	}
 
@@ -95,11 +99,18 @@ public class Articulo extends Entrada{
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + blog_articulo;
-		result = prime * result + ((fecha_publicacion_articulo == null) ? 0 : fecha_publicacion_articulo.hashCode());
-		result = prime * result + id_articulo;
-		result = prime * result + ((texto_articulo == null) ? 0 : texto_articulo.hashCode());
-		result = prime * result + ((titulo_articulo == null) ? 0 : titulo_articulo.hashCode());
+		result = prime * result
+				+ ((blog_articulo == null) ? 0 : blog_articulo.hashCode());
+		result = prime
+				* result
+				+ ((fecha_publicacion_articulo == null) ? 0
+						: fecha_publicacion_articulo.hashCode());
+		result = prime * result
+				+ ((id_articulo == null) ? 0 : id_articulo.hashCode());
+		result = prime * result
+				+ ((texto_articulo == null) ? 0 : texto_articulo.hashCode());
+		result = prime * result
+				+ ((titulo_articulo == null) ? 0 : titulo_articulo.hashCode());
 		return result;
 	}
 
@@ -113,14 +124,21 @@ public class Articulo extends Entrada{
 		if (getClass() != obj.getClass())
 			return false;
 		Articulo other = (Articulo) obj;
-		if (blog_articulo != other.blog_articulo)
+		if (blog_articulo == null) {
+			if (other.blog_articulo != null)
+				return false;
+		} else if (!blog_articulo.equals(other.blog_articulo))
 			return false;
 		if (fecha_publicacion_articulo == null) {
 			if (other.fecha_publicacion_articulo != null)
 				return false;
-		} else if (!fecha_publicacion_articulo.equals(other.fecha_publicacion_articulo))
+		} else if (!fecha_publicacion_articulo
+				.equals(other.fecha_publicacion_articulo))
 			return false;
-		if (id_articulo != other.id_articulo)
+		if (id_articulo == null) {
+			if (other.id_articulo != null)
+				return false;
+		} else if (!id_articulo.equals(other.id_articulo))
 			return false;
 		if (texto_articulo == null) {
 			if (other.texto_articulo != null)
@@ -134,10 +152,12 @@ public class Articulo extends Entrada{
 			return false;
 		return true;
 	}
+
+
 	
-	
-	
-	
+
+
+
 	
 	
 

@@ -43,12 +43,12 @@
 
 	<!-- UsuarioService -->
 	<bean id="usuarioServiceBean"
-		class="asi.ficblog.model.usuarioservice.UsuarioServiceImplement">
+		class="asi.ficblog.model.usuarioservice.UsuarioServiceImpl">
 		<!-- <property name="usuarioDAO" ref="usuarioDaoBean" /> <property name="transactionManager" 
 			ref="transactionManagerBean" /> -->
 	</bean>
 
 	<!-- BlogService -->
-	<bean id="blogServiceBean" class="asi.ficblog.model.blogservice.BlogServiceImplement">
+	<bean id="blogServiceBean" class="asi.ficblog.model.blogservice.BlogServiceImpl">
 	</bean>
 </beans>

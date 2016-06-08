@@ -8,6 +8,10 @@ public class Usuario {
 	private String contraseña_usuario;
 	private String nick_usuario;
 	
+	public Usuario(){
+		
+	}
+	
 	public Usuario(String nombre_usuario, String apellidos_usuario, String login_usuario, String contraseña_usuario,
 			String nick_usuario) {
 		this.nombre_usuario = nombre_usuario;

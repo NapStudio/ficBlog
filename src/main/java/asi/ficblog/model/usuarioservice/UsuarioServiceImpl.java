@@ -17,7 +17,7 @@ import asi.ficblog.model.util.validator.PropertyValidator;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_UNCOMMITTED, readOnly = true)
-public class UsuarioServiceImplement implements UsuarioService {
+public class UsuarioServiceImpl implements UsuarioService {
 	
 	@Autowired
 	private UsuarioDAO usuarioDAO;

@@ -6,13 +6,17 @@ import asi.ficblog.model.usuario.Usuario;
 
 public class Blog {	
 	
-	private int id_blog;
+	private Long id_blog;
 	private String titulo_blog;
 	private Date fecha_creacion_blog;
 	private String usuario_blog;
 	
+	public Blog(){
+		
+	}
+	
 
-	public Blog(int id_blog, String titulo_blog, Date fecha_creacion_blog, String usuario_blog) {
+	public Blog(Long id_blog, String titulo_blog, Date fecha_creacion_blog, String usuario_blog) {
 		super();
 		this.id_blog = id_blog;
 		this.titulo_blog = titulo_blog;
@@ -27,10 +31,10 @@ public class Blog {
 		this.usuario_blog = usuario_blog;
 	}
 		
-	public int getId_blog() {
+	public Long getId_blog() {
 		return id_blog;
 	}
-	public void setId_blog(int id_blog) {
+	public void setId_blog(Long id_blog) {
 		this.id_blog = id_blog;
 	}
 	public String getTitulo_blog() {
@@ -62,10 +66,15 @@ public class Blog {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((fecha_creacion_blog == null) ? 0 : fecha_creacion_blog.hashCode());
-		result = prime * result + id_blog;
-		result = prime * result + ((titulo_blog == null) ? 0 : titulo_blog.hashCode());
-		result = prime * result + ((usuario_blog == null) ? 0 : usuario_blog.hashCode());
+		result = prime
+				* result
+				+ ((fecha_creacion_blog == null) ? 0 : fecha_creacion_blog
+						.hashCode());
+		result = prime * result + ((id_blog == null) ? 0 : id_blog.hashCode());
+		result = prime * result
+				+ ((titulo_blog == null) ? 0 : titulo_blog.hashCode());
+		result = prime * result
+				+ ((usuario_blog == null) ? 0 : usuario_blog.hashCode());
 		return result;
 	}
 
@@ -83,7 +92,10 @@ public class Blog {
 				return false;
 		} else if (!fecha_creacion_blog.equals(other.fecha_creacion_blog))
 			return false;
-		if (id_blog != other.id_blog)
+		if (id_blog == null) {
+			if (other.id_blog != null)
+				return false;
+		} else if (!id_blog.equals(other.id_blog))
 			return false;
 		if (titulo_blog == null) {
 			if (other.titulo_blog != null)
@@ -98,6 +110,7 @@ public class Blog {
 		return true;
 	}
 
+	
 	
 	
 }

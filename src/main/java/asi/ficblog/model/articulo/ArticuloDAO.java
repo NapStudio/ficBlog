@@ -29,9 +29,10 @@ public interface ArticuloDAO {
 
 	/**
 	 * Actualiza la información de un articulo.
+	 * @return 
 	 * @throws InstanceNotFoundException 
 	 */
-	public abstract void update(Articulo articulo) throws InstanceNotFoundException;
+	public abstract Articulo update(Articulo articulo) throws InstanceNotFoundException;
 
 	/**
 	 * Elimina un articulo por su id.

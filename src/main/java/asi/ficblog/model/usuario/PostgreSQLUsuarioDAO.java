@@ -1,173 +1,95 @@
 package asi.ficblog.model.usuario;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
+
 import java.util.List;
 
-import javax.sql.DataSource;
+
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 import asi.ficblog.model.util.exceptions.InstanceNotFoundException;
 
 
 public class PostgreSQLUsuarioDAO implements UsuarioDAO{
 	
-	private DataSource dataSource;
-	
-	
-	public Usuario find(String login_usuario) 
-			throws InstanceNotFoundException {
 
-		Usuario usuario = null;
+	private NamedParameterJdbcOperations jdbcTemplate;
+		
+	public void setJdbcTemplate(NamedParameterJdbcOperations jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 
-		try {
-			Connection connection = dataSource.getConnection();
+	private static String CREATE_SQL =
+	"INSERT INTO usuario (nombre_usuario, apellidos_usuario, login_usuario, contraseña_usuario, nick_usuario) " + 
+	"VALUES (:nombre_usuario, :apellidos_usuario, :login_usuario, :contraseña_usuario, :nick_usuario)";
+
+	
+	private static String UPDATE_SQL =
+	"UPDATE usuario SET nombre_usuario = :nombre_usuario, apellidos_usuario = :apellidos_usuario, "
+	+ "contraseña_usuario = :contraseña_usuario, nick_usuario = :nick_usuario "
+	+ "WHERE login_usuario = :login_usuario";
+	
+	private static String GET_SQL = 
+	"SELECT nombre_usuario, apellidos_usuario, login_usuario, contraseña_usuario, nick_usuario "
+	+ "FROM usuario "
+	+ "WHERE login_usuario = :login_usuario";
+
+	
+	private static String GET_BYNOMBRE_SQL = 
+	"SELECT nombre_usuario, apellidos_usuario, login_usuario, contraseña_usuario, nick_usuario " 
+	+ "FROM usuario "
+	+ "WHERE nombre_usuario = :nombre_usuario";
+	
+	private static String DELETE_SQL =
+		"DELETE FROM usuario WHERE login_usuario = :login_usuario";
+
+	public Usuario insert(Usuario usuario) {		
+		SqlParameterSource params = new MapSqlParameterSource().
+				addValue("nombre_usuario", usuario.getNombre_usuario()).
+				addValue("apellidos_usuario", usuario.getApellidos_usuario()).
+				addValue("login_usuario", usuario.getLogin_usuario()).
+				addValue("contraseña_usuario", usuario.getContraseña_usuario()).
+				addValue("nick_usuario", usuario.getNick_usuario());
 			
-			PreparedStatement statement = connection.prepareStatement(
-					"SELECT nombre_usuario, apellidos_usuario, contraseña_usuario, nick_usuario FROM usuario WHERE login_usuario = ?");
-			statement.setString(1, login_usuario);
-
-			ResultSet resultSet = statement.executeQuery();
-
-			if (resultSet.next()) {
-				String nombre_usuario = resultSet.getString(1);
-				String apellidos_usuario =  resultSet.getString(2);
-				String contraseña_usuario =  resultSet.getString(3);
-				String nick_usuario =  resultSet.getString(4);
-
-				usuario = new Usuario(nombre_usuario, apellidos_usuario, login_usuario, contraseña_usuario, nick_usuario);
-
-				connection.close();
-			} else {
-				connection.close();
-				throw new InstanceNotFoundException();
-			}
-
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-
-		return usuario;
+			
+			jdbcTemplate.update(CREATE_SQL, params);
+			
+			return usuario;
+	}
+	
+	public Usuario update(Usuario usuario) throws InstanceNotFoundException {
+		//TODO modificar login??
+		SqlParameterSource params = new MapSqlParameterSource().
+				addValue("nombre_usuario", usuario.getNombre_usuario()).
+				addValue("apellidos_usuario", usuario.getApellidos_usuario()).
+				addValue("contraseña_usuario", usuario.getContraseña_usuario()).
+				addValue("nick_usuario", usuario.getNick_usuario());
+			
+			jdbcTemplate.update(UPDATE_SQL, params);
+			
+			return usuario;
+	}	
+	
+	public Usuario find(String login_usuario) throws InstanceNotFoundException {
+		SqlParameterSource params = new MapSqlParameterSource().
+				addValue("login_usuario", login_usuario);
+		
+		return jdbcTemplate.queryForObject(GET_SQL, params,new UsuarioRowMapper());
 	}
 	
 	public List<Usuario> findByName(String nombre_usuario) {
+		SqlParameterSource params = new MapSqlParameterSource().
+				addValue("nombre_usuario", nombre_usuario);
 		
-		List<Usuario> list = new ArrayList<Usuario>(); 
-		
-		try {
-			
-			Connection connection = dataSource.getConnection();
-
-			PreparedStatement statement = connection.prepareStatement(
-					"SELECT nombre_usuario, apellidos_usuario, login_usuario, contraseña_usuario, nick_usuario " + 
-					"FROM usuario WHERE nombre_usuario = ?");
-			
-			statement.setString(1, nombre_usuario);
-			
-			ResultSet resultSet = statement.executeQuery();
-			
-			while (resultSet.next()) {
-				
-				list.add(new Usuario(
-						resultSet.getString(1),	// nombre
-						resultSet.getString(2), // apellido
-						resultSet.getString(3), // login
-						resultSet.getString(4),	// contraseña
-						resultSet.getString(5))	// nick
-				);
-
-			}
-
-			connection.close();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} 
-		
-		return list;
-	}
-
-	public Usuario insert(Usuario usuario) {
-		
-		if (usuario == null)
-			return null;
-		
-		try {
-			//TODO: ReturnGeneratedKeys?
-			Connection connection = dataSource.getConnection();
-
-			PreparedStatement statement = connection.prepareStatement(
-					"INSERT INTO usuario (nombre_usuario, apellidos_usuario, login_usuario, contraseña_usuario, nick_usuario) " + 
-					"VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-			
-			statement.setString(1, usuario.getNombre_usuario());
-			statement.setString(2, usuario.getApellidos_usuario());
-			statement.setString(3, usuario.getLogin_usuario());
-			statement.setString(4, usuario.getContraseña_usuario());
-			statement.setString(5, usuario.getNick_usuario());
-			
-			statement.executeUpdate();
-			
-			//ResultSet resultSet = statement.getGeneratedKeys();
-
-			connection.close();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-		
-		return usuario;
-	}
-	
-	public void update(Usuario usuario) throws InstanceNotFoundException {
-		
-		try {
-			
-			Connection connection = dataSource.getConnection();
-
-			PreparedStatement statement = connection.prepareStatement(
-					"UPDATE usuario SET nombre_usuario = ?, apellidos_usuario = ?, contraseña_usuario = ?, nick_usuario = ? " + 
-					"WHERE login_usuario = ?");
-			
-			statement.setString(1, usuario.getNombre_usuario());
-			statement.setString(2, usuario.getApellidos_usuario());
-			statement.setString(3, usuario.getContraseña_usuario());
-			statement.setString(4, usuario.getNick_usuario());
-			statement.setString(5, usuario.getLogin_usuario());
-			
-			int updatedRows=statement.executeUpdate();
-			if(updatedRows==0){
-				throw new InstanceNotFoundException();
-			}
-
-			connection.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
+		return jdbcTemplate.query(GET_BYNOMBRE_SQL, params,new UsuarioRowMapper());
 	}
 	
 	public void remove(String login_usuario) throws InstanceNotFoundException {
-		try {
-			
-			Connection connection = dataSource.getConnection();
-
-			PreparedStatement statement = connection.prepareStatement(
-					"DELETE FROM usuario WHERE login_usuario = ?");
-			statement.setString(1, login_usuario);
-			
-			int removedRows=statement.executeUpdate();
-			if(removedRows==0){
-				throw new InstanceNotFoundException();				
-			}
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public void setDataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
+		SqlParameterSource params = new MapSqlParameterSource().
+				addValue("login_usuario", login_usuario);
+		
+		jdbcTemplate.update(DELETE_SQL, params);
 	}
 	
 }
