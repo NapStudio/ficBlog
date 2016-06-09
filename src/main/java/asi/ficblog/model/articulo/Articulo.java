@@ -2,12 +2,15 @@ package asi.ficblog.model.articulo;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import asi.ficblog.model.entrada.Entrada;
 
 public class Articulo extends Entrada{
 	
 	private Long id_articulo;
 	private String titulo_articulo;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fecha_publicacion_articulo;
 	private String texto_articulo;
 	private Long blog_articulo;
@@ -119,8 +122,6 @@ public class Articulo extends Entrada{
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
-			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Articulo other = (Articulo) obj;
@@ -129,11 +130,14 @@ public class Articulo extends Entrada{
 				return false;
 		} else if (!blog_articulo.equals(other.blog_articulo))
 			return false;
+
+		String fec1=fecha_publicacion_articulo.toString();
+		String fec2=other.fecha_publicacion_articulo.toString();
 		if (fecha_publicacion_articulo == null) {
 			if (other.fecha_publicacion_articulo != null)
 				return false;
-		} else if (!fecha_publicacion_articulo
-				.equals(other.fecha_publicacion_articulo))
+		} else if (!fec1
+				.equals(fec2))
 			return false;
 		if (id_articulo == null) {
 			if (other.id_articulo != null)

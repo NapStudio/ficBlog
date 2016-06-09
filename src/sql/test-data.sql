@@ -6,7 +6,7 @@ INSERT INTO usuario VALUES ('WARD', 'Gonzalez', 'wardy', '123456', 'Waard');
 
 
 
-INSERT INTO blog VALUES (7369, 'Spring', null, 'SmithClerk');
+/*INSERT INTO blog VALUES (7369, 'Spring', null, 'SmithClerk');
 INSERT INTO blog VALUES (7499, 'Java', null, 'chrisgomez');
 INSERT INTO blog VALUES (7521, 'Asus', null, 'ALLENSALESMAN');
 INSERT INTO blog VALUES (7566, 'Agua', null, 'ALLENSALESMAN');
@@ -25,4 +25,4 @@ INSERT INTO articulo VALUES (280, 'Spring framework', null, 'S ...',FALSE, 7369)
 
 INSERT INTO enlace VALUES (6453, 'Agua mineral', null, 'S ...', 'foto',TRUE, 7566);
 INSERT INTO enlace VALUES (5643, 'Agua con gas', null, 'S ...', 'web',TRUE, 7566);
-INSERT INTO enlace VALUES (2345, 'Asus blablabla', null, 'S ...', 'video',FALSE, 7369);
+INSERT INTO enlace VALUES (2345, 'Asus blablabla', null, 'S ...', 'video',FALSE, 7369);*/

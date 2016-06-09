@@ -9,7 +9,7 @@ public interface ArticuloDAO {
 	 * Encuentra un articulo por su id.
 	 * @throws InstanceNotFoundException si no existe un articulo con la id dada.
 	 */
-	public abstract Articulo find(Integer id_articulo)
+	public abstract Articulo find(Long id_articulo)
 			throws InstanceNotFoundException;
 	
 	
@@ -18,7 +18,7 @@ public interface ArticuloDAO {
 	 * 
 	 */
 	
-	public abstract List<Articulo> findByBlog(int blog_articulo)
+	public abstract List<Articulo> findByBlog(Long blog_articulo)
 			throws InstanceNotFoundException;
 
 	/**
@@ -37,7 +37,7 @@ public interface ArticuloDAO {
 	/**
 	 * Elimina un articulo por su id.
 	 */
-	public abstract void remove(Integer id_articulo) throws InstanceNotFoundException;
+	public abstract void remove(Long id_articulo) throws InstanceNotFoundException;
 
-	public abstract void removeAll(int blog_articulo) throws InstanceNotFoundException;
+	public abstract void removeAll(Long blog_articulo) throws InstanceNotFoundException;
 }

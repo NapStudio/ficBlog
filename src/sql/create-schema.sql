@@ -24,7 +24,7 @@ CREATE SEQUENCE blog_id_seq;
 CREATE TABLE blog (
 	id_blog BIGINT DEFAULT NEXTVAL('blog_id_seq'),
 	titulo_blog VARCHAR(20),
-	fecha_creacion_blog TIMESTAMP,
+	fecha_creacion_blog TIMESTAMP NOT NULL,
 	usuario_blog VARCHAR(20),
 	CONSTRAINT blog_pk PRIMARY KEY (id_blog),
 	CONSTRAINT blog_fk FOREIGN KEY (usuario_blog) REFERENCES usuario(login_usuario)

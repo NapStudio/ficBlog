@@ -2,12 +2,15 @@ package asi.ficblog.model.blog;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import asi.ficblog.model.usuario.Usuario;
 
 public class Blog {	
 	
 	private Long id_blog;
 	private String titulo_blog;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fecha_creacion_blog;
 	private String usuario_blog;
 	
@@ -87,10 +90,13 @@ public class Blog {
 		if (getClass() != obj.getClass())
 			return false;
 		Blog other = (Blog) obj;
+		String fec1=fecha_creacion_blog.toString();
+		String fec2=other.fecha_creacion_blog.toString();
+		
 		if (fecha_creacion_blog == null) {
 			if (other.fecha_creacion_blog != null)
 				return false;
-		} else if (!fecha_creacion_blog.equals(other.fecha_creacion_blog))
+		} else if (!fec1.equals(fec2))
 			return false;
 		if (id_blog == null) {
 			if (other.id_blog != null)

@@ -14,30 +14,25 @@
 		destroy-method="close">
 		<property name="driverClassName" value="org.postgresql.Driver" />
 		<property name="url" value="jdbc:postgresql://localhost:5432/asi" />
-		<property name="username" value="postgres" />
-		<property name="password" value="123456" />
-	</bean>
-	
-	
-	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
-		<constructor-arg ref="dataSourceBean"/>
+		<property name="username" value="asi" />
+		<property name="password" value="asi" />
 	</bean>
 
 	<!-- DAO implementations -->
 	<bean id="articuloDaoBean" class="asi.ficblog.model.articulo.PostgreSQLArticuloDAO">
-		<property name="jdbcTemplate" ref="jdbcTemplate" />
+		<property name="dataSource" ref="dataSourceBean" />
 	</bean>
 
 	<bean id="blogDaoBean" class="asi.ficblog.model.blog.PostgreSQLBlogDAO">
-		<property name="jdbcTemplate" ref="jdbcTemplate" />
+		<property name="dataSource" ref="dataSourceBean" />
 	</bean>
 
 	<bean id="usuarioDaoBean" class="asi.ficblog.model.usuario.PostgreSQLUsuarioDAO">
-		<property name="jdbcTemplate" ref="jdbcTemplate" />
+		<property name="dataSource" ref="dataSourceBean" />
 	</bean>
 
 	<bean id="enlaceDaoBean" class="asi.ficblog.model.enlace.PostgreSQLEnlaceDAO">
-		<property name="jdbcTemplate" ref="jdbcTemplate" />
+		<property name="dataSource" ref="dataSourceBean" />
 	</bean>
 
 	<!-- Transaction management -->

@@ -2,12 +2,15 @@ package asi.ficblog.model.enlace;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import asi.ficblog.model.entrada.Entrada;
 
 public class Enlace extends Entrada{
 	
 	private Long id_enlace;
 	private String titulo_enlace;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fecha_publicacion_enlace;
 	private String url_enlace;
 	private String tipo_contenido_enlace;
@@ -121,8 +124,6 @@ public class Enlace extends Entrada{
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
-			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Enlace other = (Enlace) obj;
@@ -131,11 +132,13 @@ public class Enlace extends Entrada{
 				return false;
 		} else if (!blog_enlace.equals(other.blog_enlace))
 			return false;
+		String fec1=fecha_publicacion_enlace.toString();
+		String fec2=other.fecha_publicacion_enlace.toString();
 		if (fecha_publicacion_enlace == null) {
 			if (other.fecha_publicacion_enlace != null)
 				return false;
-		} else if (!fecha_publicacion_enlace
-				.equals(other.fecha_publicacion_enlace))
+		} else if (!fec1
+				.equals(fec2))
 			return false;
 		if (id_enlace == null) {
 			if (other.id_enlace != null)

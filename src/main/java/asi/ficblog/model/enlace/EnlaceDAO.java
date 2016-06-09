@@ -9,7 +9,7 @@ public interface EnlaceDAO {
 	 * Encuentra un enlace por su id.
 	 * @throws InstanceNotFoundException si no existe un enlace con la id dada.
 	 */
-	public abstract Enlace find(Integer id_enlace)
+	public abstract Enlace find(Long id_enlace)
 			throws InstanceNotFoundException;
 	
 	
@@ -18,7 +18,7 @@ public interface EnlaceDAO {
 	 * 
 	 */
 	
-	public abstract List<Enlace> findByBlog(int blog_enlace)
+	public abstract List<Enlace> findByBlog(Long blog_enlace)
 			throws InstanceNotFoundException;
 
 	/**
@@ -36,8 +36,8 @@ public interface EnlaceDAO {
 	/**
 	 * Elimina un enlace por su id.
 	 */
-	public abstract void remove(Integer id_enlace);
+	public abstract void remove(Long id_enlace);
 
 
-	public abstract void removeAll(int blog_enlace);
+	public abstract void removeAll(Long blog_enlace);
 }

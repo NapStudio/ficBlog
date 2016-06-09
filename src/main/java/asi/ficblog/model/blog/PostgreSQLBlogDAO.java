@@ -4,6 +4,12 @@ package asi.ficblog.model.blog;
 import java.util.List;
 
 
+
+
+
+
+
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -22,40 +28,47 @@ public class PostgreSQLBlogDAO implements BlogDAO {
 	}
 
 	private static String CREATE_SQL =
-			"INSERT INTO blog (titulo_blog, fecha_creacion_blog, usuario_blog) " + "VALUES (:titulo_blog, :fecha_creacion_blog, :usuario_blog)";
+	"INSERT INTO blog (titulo_blog, fecha_creacion_blog, usuario_blog) " 
+	+ "VALUES (:titulo_blog, :fecha_creacion_blog, :usuario_blog)";
 	
 	private static String UPDATE_SQL =
-			"UPDATE blog SET titulo_blog = :titulo_blog, fecha_creacion_blog = :fecha_creacion_blog, usuario_blog = :usuario_blog "
-					+ "WHERE id_blog = :id_blog";
+	"UPDATE blog SET titulo_blog = :titulo_blog, fecha_creacion_blog = :fecha_creacion_blog, usuario_blog = :usuario_blog "
+	+ "WHERE id_blog = :id_blog";
 	
 	private static String GET_ALL_SQL = 
-			"SELECT id_articulo, titulo_blog, fecha_creacion_blog, usuario_blog FROM blog";
+			"SELECT id_blog, titulo_blog, fecha_creacion_blog, usuario_blog FROM blog";
 
 	
 	private static String GET_SQL = 
-			GET_ALL_SQL+"WHERE id_blog = :id_blog";
+			GET_ALL_SQL+" WHERE id_blog = :id_blog";
 	
 	private static String GET_BYUSUARIO_SQL = 
-			GET_ALL_SQL+"WHERE usuario_blog = :usuario_blog";
+			GET_ALL_SQL+" WHERE usuario_blog = :usuario_blog";
 
 	
 	private static String DELETE_ALL_SQL =
 			"DELETE FROM blog";
 	
+	private static String DELETE_ALLArticulos_SQL =
+			"DELETE FROM articulo";
+	
+	private static String DELETE_ALLEnlaces_SQL =
+			"DELETE FROM enlace";
+	
 	private static String DELETE_SQL =
-			DELETE_ALL_SQL+"WHERE id_blog = :id_blog";
+			DELETE_ALL_SQL+" WHERE id_blog = :id_blog";
 	
 
 	public Blog insert(Blog blog) {
 
 		SqlParameterSource params = new MapSqlParameterSource().
 				addValue("titulo_blog", blog.getTitulo_blog()).
-				addValue("fecha_creacion_blog", blog.getFecha_creacion_blog()).
+				addValue("fecha_creacion_blog",blog.getFecha_creacion_blog()).
 				addValue("usuario_blog", blog.getUsuario_blog());
 			
 			KeyHolder keyHolder = new GeneratedKeyHolder();
 			
-			jdbcTemplate.update(CREATE_SQL, params, keyHolder, new String [] {"id"});
+			jdbcTemplate.update(CREATE_SQL, params, keyHolder, new String [] {"id_blog"});
 			
 			blog.setId_blog(keyHolder.getKey().longValue());
 			
@@ -81,7 +94,8 @@ public class PostgreSQLBlogDAO implements BlogDAO {
 				addValue("titulo_articulo", blog.getTitulo_blog()).
 				addValue("titulo_blog", blog.getTitulo_blog()).
 				addValue("fecha_creacion_blog", blog.getFecha_creacion_blog()).
-				addValue("usuario_blog", blog.getUsuario_blog());;
+				addValue("id_blog", blog.getId_blog()).
+				addValue("usuario_blog", blog.getUsuario_blog());
 			
 			jdbcTemplate.update(UPDATE_SQL, params);
 			
@@ -89,11 +103,16 @@ public class PostgreSQLBlogDAO implements BlogDAO {
 		
 	}
 	
-	public Blog find(Integer id_blog) throws InstanceNotFoundException {
+	public Blog find(Long id_blog) throws InstanceNotFoundException {
 		SqlParameterSource params = new MapSqlParameterSource().
 				addValue("id_blog", id_blog);
+		try{
+			return jdbcTemplate.queryForObject(GET_SQL, params,new BlogRowMapper());
+		}catch (EmptyResultDataAccessException e) {
+			throw new InstanceNotFoundException();
+		}
+			
 		
-		return jdbcTemplate.queryForObject(GET_SQL, params,new BlogRowMapper());
 	}
 	
 	
@@ -108,10 +127,11 @@ public class PostgreSQLBlogDAO implements BlogDAO {
 		return jdbcTemplate.query(GET_ALL_SQL, new BlogRowMapper());		
 	}	
 
-	public void remove(Integer id_blog) {		SqlParameterSource params = new MapSqlParameterSource().
+	public void remove(Long id_blog) {		SqlParameterSource params = new MapSqlParameterSource().
 				addValue("id_blog", id_blog);
 		
-		jdbcTemplate.update(DELETE_SQL, params);}
+		jdbcTemplate.update(DELETE_SQL, params);
+	}
 	
 
 

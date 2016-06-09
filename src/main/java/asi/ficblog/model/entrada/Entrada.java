@@ -2,8 +2,11 @@ package asi.ficblog.model.entrada;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class Entrada implements Comparable<Entrada>{
 	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fecha_publicacion_entrada;
 	private boolean me_gusta_entrada;
 
@@ -39,7 +42,16 @@ public class Entrada implements Comparable<Entrada>{
 	}
 	
 	public int compareTo(Entrada entrada) {
-		return getFecha_publicacion_entrada().compareTo(entrada.getFecha_publicacion_entrada());
+		System.out.println(getFecha_publicacion_entrada());
+		System.out.println(entrada.getFecha_publicacion_entrada());
+		System.out.println(me_gusta_entrada);
+	    if (getFecha_publicacion_entrada() == null) {
+	        return (entrada.getFecha_publicacion_entrada() == null) ? 0 : -1;
+	    }
+	    if (entrada.getFecha_publicacion_entrada() == null) {
+	        return 1;
+	    }
+	    return entrada.getFecha_publicacion_entrada().compareTo(getFecha_publicacion_entrada());
 	}
 
 	

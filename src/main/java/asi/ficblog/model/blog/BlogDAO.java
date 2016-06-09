@@ -10,7 +10,7 @@ public interface BlogDAO {
 	 * Encuentra un blog por su id.
 	 * @throws InstanceNotFoundException si no existe un blog con la id dada.
 	 */
-	public abstract Blog find(Integer id_blog)
+	public abstract Blog find(Long id_blog)
 			throws InstanceNotFoundException;
 	
 	
@@ -37,7 +37,7 @@ public interface BlogDAO {
 	/**
 	 * Elimina un blog por su id.
 	 */
-	public abstract void remove(Integer id_blog);
+	public abstract void remove(Long id_blog);
 	
 	public abstract List<Blog> getAll();
 	
