@@ -22,9 +22,7 @@ import asi.ficblog.model.util.exceptions.InstanceNotFoundException;
 public class UsuarioServiceTest {
 	
 	@Autowired
-	private UsuarioService usuarioService;
-	
-	
+	private UsuarioService usuarioService;	
 
 
 	@Test
@@ -32,14 +30,14 @@ public class UsuarioServiceTest {
 		
 		Usuario usuario = new Usuario("Alejandro", "Vazquez","avazquez","123456", "alej");
 		
-		try{// Creates a new product
+		try{// Creates a new user
 		usuarioService.registrarUsuario(usuario);
 		
-		// Retrieves the product
+		// Retrieves the user
 		Usuario aux = usuarioService.findUsuarioByLogin(usuario.getLogin_usuario());
 		Assert.assertEquals(usuario,aux);
 		
-		// Deletes the product
+		// Deletes the user
 		}finally{
 			usuarioService.eliminarUsuario(usuario.getLogin_usuario());
 		}
