@@ -9,18 +9,24 @@ import java.util.List;
 
 
 
+
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 
 import asi.ficblog.model.articulo.Articulo;
 import asi.ficblog.model.util.exceptions.InstanceNotFoundException;
 
+@Repository
 public class PostgreSQLBlogDAO implements BlogDAO {
-
+	
+	@Autowired
 	private NamedParameterJdbcOperations jdbcTemplate;
 	
 	public void setJdbcTemplate(NamedParameterJdbcOperations jdbcTemplate) {
@@ -124,7 +130,10 @@ public class PostgreSQLBlogDAO implements BlogDAO {
 	}
 	
 	public List<Blog> getAll() {
-		return jdbcTemplate.query(GET_ALL_SQL, new BlogRowMapper());		
+		System.out.println("getAll");
+		List<Blog> blogs=jdbcTemplate.query(GET_ALL_SQL, new BlogRowMapper());	
+		System.out.println(blogs);
+		return blogs;
 	}	
 
 	public void remove(Long id_blog) {		SqlParameterSource params = new MapSqlParameterSource().

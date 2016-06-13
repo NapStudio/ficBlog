@@ -15,7 +15,6 @@
         http://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/security
 		http://www.springframework.org/schema/security/spring-security-4.0.xsd">
-  	
 
 
 	<!-- Data Source -->
@@ -26,10 +25,11 @@
 		<property name="username" value="postgres" />
 		<property name="password" value="123456" />
 	</bean>
-	
-	
-	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
-		<constructor-arg ref="dataSourceBean"/>
+
+
+	<bean id="jdbcTemplate"
+		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg ref="dataSourceBean" />
 	</bean>
 
 	<!-- DAO implementations -->
@@ -56,15 +56,51 @@
 	</bean>
 
 	<!-- UsuarioService -->
-	<bean id="usuarioServiceBean"
-		class="asi.ficblog.model.usuarioservice.UsuarioServiceImpl">
+	<bean id="usuarioServiceBean" class="asi.ficblog.model.usuarioservice.UsuarioServiceImpl">
 		<!-- <property name="usuarioDAO" ref="usuarioDaoBean" /> <property name="transactionManager" 
 			ref="transactionManagerBean" /> -->
 	</bean>
 
-
-
 	<!-- BlogService -->
 	<bean id="blogServiceBean" class="asi.ficblog.model.blogservice.BlogServiceImpl">
+		<property name="blogDAO" ref="blogDaoBean" />
+		<property name="enlaceDAO" ref="enlaceDaoBean" />
+		<property name="articuloDAO" ref="articuloDaoBean" />
 	</bean>
+
+
+	<!-- blog Controller -->
+	<bean name="/blog/*" class="asi.ficblog.web.blog.BlogController">
+		<property name="blogService" ref="blogServiceBean" />
+	</bean>
+
+	<!-- View Resolver -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+
+
+
+
+	<!-- Internationalization -->
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+		<property name="defaultLocale" value="en_EN" />
+	</bean>
+
+	<mvc:interceptors>
+		<bean id="localeChangeInterceptor"
+			class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+			<property name="paramName" value="language" />
+		</bean>
+	</mvc:interceptors>
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="classpath:messages" />
+	</bean>
+
 </beans>

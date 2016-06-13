@@ -6,14 +6,14 @@ INSERT INTO usuario VALUES ('WARD', 'Gonzalez', 'wardy', '123456', 'Waard');
 
 
 
-/*INSERT INTO blog VALUES (7369, 'Spring', null, 'SmithClerk');
-INSERT INTO blog VALUES (7499, 'Java', null, 'chrisgomez');
-INSERT INTO blog VALUES (7521, 'Asus', null, 'ALLENSALESMAN');
-INSERT INTO blog VALUES (7566, 'Agua', null, 'ALLENSALESMAN');
-INSERT INTO blog VALUES (7782, 'Portatiles', null, 'wardy');
-INSERT INTO blog VALUES (7844, 'UDC', null, 'SmithClerk');
+INSERT INTO blog VALUES (7369, 'Spring', '2015-05-09', 'SmithClerk');
+INSERT INTO blog VALUES (7499, 'Java', '2015-06-09', 'chrisgomez');
+INSERT INTO blog VALUES (7521, 'Asus', '2015-08-19', 'ALLENSALESMAN');
+INSERT INTO blog VALUES (7566, 'Agua', '2016-03-04', 'ALLENSALESMAN');
+INSERT INTO blog VALUES (7782, 'Portatiles', '2016-04-09', 'wardy');
+INSERT INTO blog VALUES (7844, 'UDC', '2016-06-09', 'SmithClerk');
 
-
+/*
 
 INSERT INTO articulo VALUES (230, 'UDC universidad', null, 'La universidad en la UDC ...',TRUE, 7844);
 INSERT INTO articulo VALUES (240, 'UDC deportes', null, 'Los deportes en la UDC ...',TRUE, 7844);

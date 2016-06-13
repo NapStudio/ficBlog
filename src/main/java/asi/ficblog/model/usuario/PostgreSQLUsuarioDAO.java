@@ -2,6 +2,7 @@ package asi.ficblog.model.usuario;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
@@ -10,7 +11,8 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import asi.ficblog.model.util.exceptions.InstanceNotFoundException;
 
 public class PostgreSQLUsuarioDAO implements UsuarioDAO {
-
+	
+	@Autowired
 	private NamedParameterJdbcOperations jdbcTemplate;
 
 	public void setJdbcTemplate(NamedParameterJdbcOperations jdbcTemplate) {

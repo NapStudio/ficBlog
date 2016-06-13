@@ -1,6 +1,5 @@
 package asi.ficblog.model.blogservice;
 
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -29,11 +28,11 @@ import asi.ficblog.model.util.validator.PropertyValidator;
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, readOnly = false)
 public class BlogServiceImpl implements BlogService {
 
-	@Autowired
+	//@Autowired
 	private BlogDAO blogDAO;
-	@Autowired
+	//@Autowired
 	private EnlaceDAO enlaceDAO;
-	@Autowired
+	//@Autowired
 	private ArticuloDAO articuloDAO;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	Date date;
@@ -227,6 +226,7 @@ public class BlogServiceImpl implements BlogService {
 
 	@Transactional(readOnly = true)
 	public List<Blog> buscarTodosBlogs() {
+		System.out.println("buscar todos blogs");
 		return blogDAO.getAll();
 	}
 
@@ -236,6 +236,30 @@ public class BlogServiceImpl implements BlogService {
 			eliminarEntradasBlog(blog.getId_blog());
 			eliminarBlog(blog.getId_blog());
 		}
+	}
+
+	public BlogDAO getBlogDAO() {
+		return blogDAO;
+	}
+
+	public void setBlogDAO(BlogDAO blogDAO) {
+		this.blogDAO = blogDAO;
+	}
+
+	public EnlaceDAO getEnlaceDAO() {
+		return enlaceDAO;
+	}
+
+	public void setEnlaceDAO(EnlaceDAO enlaceDAO) {
+		this.enlaceDAO = enlaceDAO;
+	}
+
+	public ArticuloDAO getArticuloDAO() {
+		return articuloDAO;
+	}
+
+	public void setArticuloDAO(ArticuloDAO articuloDAO) {
+		this.articuloDAO = articuloDAO;
 	}
 	
 	
