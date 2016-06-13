@@ -12,8 +12,8 @@ public class EnlaceRowMapper implements RowMapper<Enlace> {
 		Enlace enlace = new Enlace();
 		
 		enlace.setId_enlace(rs.getLong("id_enlace"));
-		enlace.setTitulo_enlace(rs.getString("titulo_enlace"));
-		enlace.setFecha_publicacion_enlace(rs.getDate("fecha_publicacion_enlace"));
+		enlace.setTitulo_entrada(rs.getString("titulo_enlace"));
+		enlace.setFecha_publicacion_entrada(rs.getDate("fecha_publicacion_enlace"));
 		enlace.setUrl_enlace(rs.getString("url_enlace"));
 		enlace.setMe_gusta_entrada(rs.getBoolean("me_gusta_enlace"));
 		enlace.setTipo_contenido_enlace(rs.getString("tipo_contenido_enlace"));

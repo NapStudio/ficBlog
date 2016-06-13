@@ -25,12 +25,19 @@ public class PostgreSQLUsuarioDAO implements UsuarioDAO {
 	private static String UPDATE_SQL = "UPDATE usuario SET nombre_usuario = :nombre_usuario, apellidos_usuario = :apellidos_usuario, "
 			+ "contraseña_usuario = :contraseña_usuario, nick_usuario = :nick_usuario "
 			+ "WHERE login_usuario = :login_usuario";
+	
+	private static String GET_ALL_SQL = 
+			"SELECT nombre_usuario, apellidos_usuario, login_usuario, "
+			+ "contraseña_usuario, nick_usuario "
+			+ "FROM usuario ";
 
-	private static String GET_SQL = "SELECT nombre_usuario, apellidos_usuario, login_usuario, contraseña_usuario, nick_usuario "
-			+ "FROM usuario " + "WHERE login_usuario = :login_usuario";
+	private static String GET_SQL = 
+			GET_ALL_SQL
+			+ "WHERE login_usuario = :login_usuario";
 
-	private static String GET_BYNOMBRE_SQL = "SELECT nombre_usuario, apellidos_usuario, login_usuario, contraseña_usuario, nick_usuario "
-			+ "FROM usuario " + "WHERE nombre_usuario = :nombre_usuario";
+	private static String GET_BYNOMBRE_SQL = 
+			GET_ALL_SQL
+			+ "WHERE nombre_usuario = :nombre_usuario";
 
 	private static String DELETE_SQL = "DELETE FROM usuario WHERE login_usuario = :login_usuario";
 
@@ -53,11 +60,11 @@ public class PostgreSQLUsuarioDAO implements UsuarioDAO {
 				.addValue("nombre_usuario", usuario.getNombre_usuario())
 				.addValue("apellidos_usuario", usuario.getApellidos_usuario())
 				.addValue("contraseña_usuario", usuario.getContraseña_usuario())
-				.addValue("login_usuario", usuario.getLogin_usuario())
-				.addValue("nick_usuario", usuario.getNick_usuario());
+				.addValue("nick_usuario", usuario.getNick_usuario())
+				.addValue("login_usuario", usuario.getLogin_usuario());
 
 		jdbcTemplate.update(UPDATE_SQL, params);
-
+		System.out.println("update DAO");
 		return usuario;
 	}
 
@@ -78,6 +85,11 @@ public class PostgreSQLUsuarioDAO implements UsuarioDAO {
 
 		return jdbcTemplate.query(GET_BYNOMBRE_SQL, params,
 				new UsuarioRowMapper());
+	}
+	
+	
+	public List<Usuario> getAll() {
+		return jdbcTemplate.query(GET_ALL_SQL, new UsuarioRowMapper());
 	}
 
 	public void remove(String login_usuario) throws InstanceNotFoundException {

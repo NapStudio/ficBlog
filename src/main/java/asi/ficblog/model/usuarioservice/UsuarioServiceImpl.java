@@ -48,6 +48,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 	public void modificarUsuario(Usuario usuario) throws InputValidationException, InstanceNotFoundException {
 		validarUsuario(usuario);
+		System.out.println(usuario);
 		usuarioDAO.update(usuario);
 
 	}
@@ -64,5 +65,19 @@ public class UsuarioServiceImpl implements UsuarioService {
 		usuarioDAO.insert(usuario);
 		
 	}
+
+	public List<Usuario> getAllUsuarios() {
+		return usuarioDAO.getAll();
+	}
+
+	public UsuarioDAO getUsuarioDAO() {
+		return usuarioDAO;
+	}
+
+	public void setUsuarioDAO(UsuarioDAO usuarioDAO) {
+		this.usuarioDAO = usuarioDAO;
+	}
+	
+	
 
 }

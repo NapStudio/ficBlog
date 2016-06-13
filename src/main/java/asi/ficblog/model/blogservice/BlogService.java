@@ -38,7 +38,7 @@ public interface BlogService {
 	
 	public void modificarEnlace(Enlace enlace) throws InstanceNotFoundException, InputValidationException;
 	
-	public List<Entrada> buscarEntradas(Blog blog) throws InstanceNotFoundException, InputValidationException;
+	public List<Entrada> buscarEntradas(Long id_blog) throws InstanceNotFoundException, InputValidationException;
 	
 	public Articulo buscarArticulo(Long id_articulo) throws InstanceNotFoundException , InputValidationException;
 	

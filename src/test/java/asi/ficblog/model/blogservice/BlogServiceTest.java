@@ -226,7 +226,7 @@ public class BlogServiceTest {
 			blogService.modificarArticulo("cambio prueba 1", "esta es la modificacion de la prueba",
 					articulo.getId_articulo());
 			Articulo aux = (blogService.buscarArticulo(articulo.getId_articulo()));
-			Assert.assertEquals("cambio prueba 1", aux.getTitulo_articulo());
+			Assert.assertEquals("cambio prueba 1", aux.getTitulo_entrada());
 			Assert.assertEquals("esta es la modificacion de la prueba", aux.getTexto_articulo());
 		} finally {
 			blogService.eliminarArticulo(articulo.getId_articulo());
@@ -241,7 +241,7 @@ public class BlogServiceTest {
 			enlace = blogService.crearEnlace("prueba 1", "www.prueba.com", "video", blog.getId_blog());
 			blogService.modificarEnlace("cambio prueba 1", "www.modificacion.com", "foto", enlace.getId_enlace());
 			Enlace aux = (blogService.buscarEnlace(enlace.getId_enlace()));
-			Assert.assertEquals("cambio prueba 1", aux.getTitulo_enlace());
+			Assert.assertEquals("cambio prueba 1", aux.getTitulo_entrada());
 			Assert.assertEquals("www.modificacion.com", aux.getUrl_enlace());
 			Assert.assertEquals("foto", aux.getTipo_contenido_enlace());
 		} finally {

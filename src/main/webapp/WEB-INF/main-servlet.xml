@@ -57,8 +57,7 @@
 
 	<!-- UsuarioService -->
 	<bean id="usuarioServiceBean" class="asi.ficblog.model.usuarioservice.UsuarioServiceImpl">
-		<!-- <property name="usuarioDAO" ref="usuarioDaoBean" /> <property name="transactionManager" 
-			ref="transactionManagerBean" /> -->
+		<property name="usuarioDAO" ref="usuarioDaoBean" /> 
 	</bean>
 
 	<!-- BlogService -->
@@ -72,6 +71,12 @@
 	<!-- blog Controller -->
 	<bean name="/blog/*" class="asi.ficblog.web.blog.BlogController">
 		<property name="blogService" ref="blogServiceBean" />
+	</bean>
+
+
+	<!-- usuario Controller -->
+	<bean name="/usuario/*" class="asi.ficblog.web.usuario.UsuarioController">
+		<property name="usuarioService" ref="usuarioServiceBean" />
 	</bean>
 
 	<!-- View Resolver -->

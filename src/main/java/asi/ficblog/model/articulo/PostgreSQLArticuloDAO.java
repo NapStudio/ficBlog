@@ -39,12 +39,14 @@ public class PostgreSQLArticuloDAO implements ArticuloDAO {
 	public Articulo insert(Articulo articulo) {
 
 		SqlParameterSource params = new MapSqlParameterSource()
-				.addValue("titulo_articulo", articulo.getTitulo_articulo())
+				.addValue("titulo_articulo", articulo.getTitulo_entrada())
 				.addValue("fecha_publicacion_articulo",
-						articulo.getFecha_publicacion_articulo())
+						articulo.getFecha_publicacion_entrada())
 				.addValue("texto_articulo", articulo.getTexto_articulo())
 				.addValue("me_gusta_articulo", articulo.isMe_gusta_entrada())
 				.addValue("blog_articulo", articulo.getBlog_articulo());
+		
+		
 
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -52,6 +54,8 @@ public class PostgreSQLArticuloDAO implements ArticuloDAO {
 				new String[] { "id_articulo" });
 
 		articulo.setId_articulo(keyHolder.getKey().longValue());
+		
+		System.out.println("articulo insert: "+articulo);
 
 		return articulo;
 
@@ -59,9 +63,9 @@ public class PostgreSQLArticuloDAO implements ArticuloDAO {
 
 	public Articulo update(Articulo articulo) throws InstanceNotFoundException {
 		SqlParameterSource params = new MapSqlParameterSource()
-				.addValue("titulo_articulo", articulo.getTitulo_articulo())
+				.addValue("titulo_articulo", articulo.getTitulo_entrada())
 				.addValue("fecha_publicacion_articulo",
-						articulo.getFecha_publicacion_articulo())
+						articulo.getFecha_publicacion_entrada())
 				.addValue("texto_articulo", articulo.getTexto_articulo())
 				.addValue("me_gusta_articulo", articulo.isMe_gusta_entrada())
 				.addValue("id_articulo", articulo.getId_articulo())
@@ -75,6 +79,7 @@ public class PostgreSQLArticuloDAO implements ArticuloDAO {
 	public Articulo find(Long id_articulo) throws InstanceNotFoundException {
 		SqlParameterSource params = new MapSqlParameterSource().addValue(
 				"id_articulo", id_articulo);
+		System.out.println("find articulo : ");
 		try {
 			return jdbcTemplate.queryForObject(GET_SQL, params,
 					new ArticuloRowMapper());

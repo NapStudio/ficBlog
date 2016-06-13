@@ -28,11 +28,11 @@ import asi.ficblog.model.util.validator.PropertyValidator;
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, readOnly = false)
 public class BlogServiceImpl implements BlogService {
 
-	//@Autowired
+	@Autowired
 	private BlogDAO blogDAO;
-	//@Autowired
+	@Autowired
 	private EnlaceDAO enlaceDAO;
-	//@Autowired
+	@Autowired
 	private ArticuloDAO articuloDAO;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	Date date;
@@ -49,14 +49,14 @@ public class BlogServiceImpl implements BlogService {
 		PropertyValidator.validateMandatoryString("texto",
 				articulo.getTexto_articulo());
 		PropertyValidator.validateMandatoryString("articulo",
-				articulo.getTitulo_articulo());
+				articulo.getTitulo_entrada());
 		PropertyValidator.validateNotNegativeLong("idBlog",
 				articulo.getBlog_articulo());
 	}
 
 	public void validarEnlace(Enlace enlace) throws InputValidationException {
 		PropertyValidator.validateMandatoryString("titulo",
-				enlace.getTitulo_enlace());
+				enlace.getTitulo_entrada());
 		PropertyValidator.validateMandatoryString("enlace",
 				enlace.getUrl_enlace());
 		PropertyValidator.validateNotNegativeLong("idBlog",
@@ -132,7 +132,7 @@ public class BlogServiceImpl implements BlogService {
 			String nuevo_texto_articulo, Long id_articulo)
 			throws InstanceNotFoundException, InputValidationException {
 		Articulo articulo = articuloDAO.find(id_articulo);
-		articulo.setTitulo_articulo(nuevo_titulo_articulo);
+		articulo.setTitulo_entrada(nuevo_titulo_articulo);
 		articulo.setTexto_articulo(nuevo_texto_articulo);
 		validarArticulo(articulo);
 		articuloDAO.update(articulo);
@@ -150,7 +150,7 @@ public class BlogServiceImpl implements BlogService {
 			String tipo_contenido, Long id_enlace)
 			throws InstanceNotFoundException, InputValidationException {
 		Enlace enlace = enlaceDAO.find(id_enlace);
-		enlace.setTitulo_enlace(titulo_enlace);
+		enlace.setTitulo_entrada(titulo_enlace);
 		enlace.setUrl_enlace(url_enlace);
 		enlace.setTipo_contenido_enlace(tipo_contenido);
 		validarEnlace(enlace);
@@ -176,31 +176,40 @@ public class BlogServiceImpl implements BlogService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Entrada> buscarEntradas(Blog blog)
+	public List<Entrada> buscarEntradas(Long id_blog)
 			throws InstanceNotFoundException {
 		List<Entrada> lista_entradas = new ArrayList<Entrada>();
 		List<Articulo> lista_articulos = new ArrayList<Articulo>();
 		List<Enlace> lista_enlaces = new ArrayList<Enlace>();
 
-		lista_articulos = articuloDAO.findByBlog(blog.getId_blog());
-
+		lista_articulos = articuloDAO.findByBlog(id_blog);
 		if (!lista_articulos.isEmpty()) {
 			lista_entradas.addAll(lista_articulos);
+			for (Entrada entrada : lista_entradas) {
+				System.out.println("Sin ordenar \n");
+				System.out.println(entrada);
+				System.out.println("\n");
+			}
 
 		}
-		lista_enlaces = enlaceDAO.findByBlog(blog.getId_blog());
+		lista_enlaces = enlaceDAO.findByBlog(id_blog);
 		if (!lista_enlaces.isEmpty()) {
 			lista_entradas.addAll(lista_enlaces);
+			for (Entrada entrada : lista_entradas) {
+				System.out.println("Sin ordenar \n");
+				System.out.println(entrada);
+				System.out.println("\n");
+			}
+			
 
 		}
 		if (!lista_entradas.isEmpty()) {
-			for (Entrada entrada : lista_entradas) {
-				System.out.println(entrada);
-			}
 			System.out.println(lista_entradas);
-			 Collections.sort(lista_entradas);
-			 for (Entrada entrada : lista_entradas) {
+			Collections.sort(lista_entradas);
+			for (Entrada entrada : lista_entradas) {
+					System.out.println("Ordenada \n");
 					System.out.println(entrada);
+					System.out.println("\n");
 				}
 		}
 

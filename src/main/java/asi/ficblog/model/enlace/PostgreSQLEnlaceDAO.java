@@ -39,9 +39,9 @@ public class PostgreSQLEnlaceDAO implements EnlaceDAO {
 	public Enlace insert(Enlace enlace) {
 
 		SqlParameterSource params = new MapSqlParameterSource()
-				.addValue("titulo_enlace", enlace.getTitulo_enlace())
+				.addValue("titulo_enlace", enlace.getTitulo_entrada())
 				.addValue("fecha_publicacion_enlace",
-						enlace.getFecha_publicacion_enlace())
+						enlace.getFecha_publicacion_entrada())
 				.addValue("url_enlace", enlace.getUrl_enlace())
 				.addValue("me_gusta_enlace", enlace.isMe_gusta_entrada())
 				.addValue("tipo_contenido_enlace",
@@ -60,9 +60,9 @@ public class PostgreSQLEnlaceDAO implements EnlaceDAO {
 
 	public Enlace update(Enlace enlace) {
 		SqlParameterSource params = new MapSqlParameterSource()
-				.addValue("titulo_enlace", enlace.getTitulo_enlace())
+				.addValue("titulo_enlace", enlace.getTitulo_entrada())
 				.addValue("fecha_publicacion_enlace",
-						enlace.getFecha_publicacion_enlace())
+						enlace.getFecha_publicacion_entrada())
 				.addValue("url_enlace", enlace.getUrl_enlace())
 				.addValue("me_gusta_enlace", enlace.isMe_gusta_entrada())
 				.addValue("tipo_contenido_enlace",
@@ -90,6 +90,7 @@ public class PostgreSQLEnlaceDAO implements EnlaceDAO {
 			throws InstanceNotFoundException {
 		SqlParameterSource params = new MapSqlParameterSource().addValue(
 				"blog_enlace", blog_enlace);
+	
 		return jdbcTemplate
 				.query(GET_BYBLOG_SQL, params, new EnlaceRowMapper());
 	}

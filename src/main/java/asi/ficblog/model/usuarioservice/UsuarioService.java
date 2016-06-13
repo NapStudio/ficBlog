@@ -12,6 +12,8 @@ public interface UsuarioService {
 		
 		public List<Usuario> findUsuariobyName(String nombre_usuario);
 		
+		public List<Usuario> getAllUsuarios();
+		
 		public void registrarUsuario(Usuario usuario) throws InputValidationException;
 		
 		public void modificarUsuario(Usuario usuario) throws InputValidationException, InstanceNotFoundException;

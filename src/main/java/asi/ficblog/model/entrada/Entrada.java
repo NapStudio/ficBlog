@@ -9,6 +9,7 @@ public class Entrada implements Comparable<Entrada>{
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fecha_publicacion_entrada;
 	private boolean me_gusta_entrada;
+	private String titulo_entrada;
 
 	public Entrada(){
 		
@@ -23,6 +24,28 @@ public class Entrada implements Comparable<Entrada>{
 	public Entrada(Date fecha_publicacion_entrada) {
 		super();
 		this.fecha_publicacion_entrada = fecha_publicacion_entrada;
+	}
+
+	public Entrada(Date fecha_publicacion_entrada, boolean me_gusta_entrada,
+			String titulo_entrada) {
+		super();
+		this.fecha_publicacion_entrada = fecha_publicacion_entrada;
+		this.me_gusta_entrada = me_gusta_entrada;
+		this.titulo_entrada = titulo_entrada;
+	}
+
+	public Entrada(Date fecha_publicacion_entrada, String titulo_entrada) {
+		super();
+		this.fecha_publicacion_entrada = fecha_publicacion_entrada;
+		this.titulo_entrada = titulo_entrada;
+	}
+
+	public String getTitulo_entrada() {
+		return titulo_entrada;
+	}
+
+	public void setTitulo_entrada(String titulo_entrada) {
+		this.titulo_entrada = titulo_entrada;
 	}
 
 	public boolean isMe_gusta_entrada() {
@@ -41,17 +64,27 @@ public class Entrada implements Comparable<Entrada>{
 		this.fecha_publicacion_entrada = fecha_publicacion_entrada;
 	}
 	
-	public int compareTo(Entrada entrada) {
-		System.out.println(getFecha_publicacion_entrada());
-		System.out.println(entrada.getFecha_publicacion_entrada());
-		System.out.println(me_gusta_entrada);
+
+	public int compareTo(Entrada other) {
+		System.out.println("entrada: "+this);
+		System.out.println("fecha: "+getFecha_publicacion_entrada());
 	    if (getFecha_publicacion_entrada() == null) {
-	        return (entrada.getFecha_publicacion_entrada() == null) ? 0 : -1;
+	    	System.out.println(1);
+	        return (other.getFecha_publicacion_entrada() == null) ? 0 : -1;
 	    }
-	    if (entrada.getFecha_publicacion_entrada() == null) {
+	    if (other.getFecha_publicacion_entrada() == null) {
+	    	System.out.println(2);
 	        return 1;
 	    }
-	    return entrada.getFecha_publicacion_entrada().compareTo(getFecha_publicacion_entrada());
+	    if(other.getFecha_publicacion_entrada().before(getFecha_publicacion_entrada())){
+	    	System.out.println(3);
+	    	return -1;
+	    }else if(other.getFecha_publicacion_entrada().after(getFecha_publicacion_entrada())){
+	    	System.out.println(4);
+	    	return 1;
+	    }
+    	System.out.println(5);
+	    return 0;
 	}
 
 	

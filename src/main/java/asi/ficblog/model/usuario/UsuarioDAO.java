@@ -20,6 +20,10 @@ public interface UsuarioDAO {
 	 */
 	public abstract List<Usuario> findByName(String nombre_usuario);
 	
+	
+	
+	public abstract List<Usuario> getAll();
+	
 
 	/**
 	 * Inserta un nuevo Usuario.

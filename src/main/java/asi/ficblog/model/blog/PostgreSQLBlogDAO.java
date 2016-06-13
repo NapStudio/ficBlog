@@ -81,19 +81,6 @@ public class PostgreSQLBlogDAO implements BlogDAO {
 			return blog;		
 	}
 	
-	public Articulo update(Articulo articulo) throws InstanceNotFoundException {
-		SqlParameterSource params = new MapSqlParameterSource().
-			addValue("titulo_articulo", articulo.getTitulo_articulo()).
-			addValue("fecha_publicacion_articulo", articulo.getFecha_publicacion_articulo()).
-			addValue("texto_articulo", articulo.getTexto_articulo()).
-			addValue("me_gusta_articulo", articulo.isMe_gusta_entrada()).
-			addValue("blog_articulo", articulo.getBlog_articulo());
-		
-		jdbcTemplate.update(UPDATE_SQL, params);
-		
-		return articulo;
-}
-	
 	public Blog update(Blog blog) {
 		
 		SqlParameterSource params = new MapSqlParameterSource().

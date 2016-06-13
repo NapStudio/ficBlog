@@ -14,6 +14,8 @@
 
 <a href="/ficblog/main/blog/list">List of blogs</a>
 
+<a href="/ficblog/main/usuario/list">List of usuarios</a>
+
 </body>
 
 </html>

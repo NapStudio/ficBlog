@@ -4,7 +4,7 @@
 <h3><s:message code="blogs.list.title"/></h3>
 
 <p>
-	<a href="<c:url value="addIssueForm"/>">
+	<a href="<c:url value="addBlogForm"/>">
 		<s:message code="blogs.list.add"/>
 	</a>
 </p>
@@ -12,7 +12,7 @@
 <table border="1">
 	<tr>
 		<th><s:message code="blogs.title"/></th>
-		<th><s:message code="blogs.description"/></th>
+		<th><s:message code="blogs.usuario"/></th>
 		<th><s:message code="blogs.date"/></th>
 		<th><s:message code="blogs.actions"/></th>
 	</tr>
@@ -24,20 +24,12 @@
 			<td>${blog.usuario_blog}</td>
 			<td>${blog.fecha_creacion_blog}</td>
 
-			<c:url value="updateBlogForm" var="updateURL">
-				<c:param name="id" value="${blog.id_blog}" />
-			</c:url>
-
-			<c:url value="delete" var="deleteURL">
-				<c:param name="id" value="${blog.id_blog}" />
-			</c:url>
 
 			<c:url value="details" var="detailsURL">
-				<c:param name="id" value="${blog.id_blog}" />
+				<c:param name="id_blog" value="${blog.id_blog}" />
 			</c:url>
 
-			<td><a href="${updateURL}"><s:message code="blogs.update"/></a> &nbsp; 
-				<a href="${deleteURL}"><s:message code="blogs.delete"/></a> &nbsp;
+			<td>
 				<a href="${detailsURL}"><s:message code="blogs.details"/></a>
 			</td>
 		</tr>
