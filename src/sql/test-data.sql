@@ -1,10 +1,17 @@
 -- Inserts some test data into the tables
-INSERT INTO usuario VALUES ('Christopher', 'Gomez', 'chrisgomez', '123456', 'chris');
-INSERT INTO usuario VALUES ('SMITH', 'CLERK', 'SmithClerk', '123456', 'clerk');
-INSERT INTO usuario VALUES ('ALLEN', 'SALESMAN', 'ALLENSALESMAN', '123456', 'ALLEN');
-INSERT INTO usuario VALUES ('WARD', 'Gonzalez', 'wardy', '123456', 'Waard');
+INSERT INTO usuario VALUES ('Christopher', 'Gomez', 'chrisgomez', '123456', 'chris', true);
+INSERT INTO usuario VALUES ('SMITH', 'CLERK', 'SmithClerk', '123456', 'clerk', true);
+INSERT INTO usuario VALUES ('ALLEN', 'SALESMAN', 'ALLENSALESMAN', '123456', 'ALLEN', true);
+INSERT INTO usuario VALUES ('WARD', 'Gonzalez', 'wardy', '123456', 'Waard', true);
 
+INSERT INTO usuario VALUES ('asi', 'asi', 'asi', 'asi', 'asi', true);
 
+INSERT INTO UserRoles (login_usuario, role) VALUES ('chrisgomez', 'ROLE_AUTHENTICATED');
+INSERT INTO UserRoles (login_usuario, role) VALUES ('SmithClerk', 'ROLE_AUTHENTICATED');
+INSERT INTO UserRoles (login_usuario, role) VALUES ('ALLENSALESMAN', 'ROLE_AUTHENTICATED');
+INSERT INTO UserRoles (login_usuario, role) VALUES ('wardy', 'ROLE_AUTHENTICATED');
+
+INSERT INTO UserRoles (login_usuario, role) VALUES ('asi', 'ROLE_AUTHENTICATED');
 
 INSERT INTO blog VALUES (7369, 'Spring', '2015-05-09', 'SmithClerk');
 INSERT INTO blog VALUES (7499, 'Java', '2015-06-09', 'chrisgomez');
@@ -12,7 +19,6 @@ INSERT INTO blog VALUES (7521, 'Asus', '2015-08-19', 'ALLENSALESMAN');
 INSERT INTO blog VALUES (7566, 'Agua', '2016-03-04', 'ALLENSALESMAN');
 INSERT INTO blog VALUES (7782, 'Portatiles', '2016-04-09', 'wardy');
 INSERT INTO blog VALUES (7844, 'UDC', '2016-06-09', 'SmithClerk');
-
 
 
 INSERT INTO articulo VALUES (230, 'UDC universidad', '2015-02-09', 'La universidad en la UDC ...',TRUE, 7844);

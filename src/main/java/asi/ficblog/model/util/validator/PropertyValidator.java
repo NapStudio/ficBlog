@@ -2,8 +2,12 @@ package asi.ficblog.model.util.validator;
 
 import java.math.BigInteger;
 import java.util.Calendar;
+
+import org.springframework.stereotype.Component;
+
 import asi.ficblog.model.util.exceptions.InputValidationException;
 
+@Component
 public final class PropertyValidator {
 
     private PropertyValidator() {}

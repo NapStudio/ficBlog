@@ -5,19 +5,19 @@ public class Usuario {
 	private String nombre_usuario;
 	private String apellidos_usuario;
 	private String login_usuario;
-	private String contraseña_usuario;
+	private String contrasinal_usuario;
 	private String nick_usuario;
 	
 	public Usuario(){
 		
 	}
 	
-	public Usuario(String nombre_usuario, String apellidos_usuario, String login_usuario, String contraseña_usuario,
+	public Usuario(String nombre_usuario, String apellidos_usuario, String login_usuario, String contrasinal_usuario,
 			String nick_usuario) {
 		this.nombre_usuario = nombre_usuario;
 		this.apellidos_usuario = apellidos_usuario;
 		this.login_usuario = login_usuario;
-		this.contraseña_usuario = contraseña_usuario;
+		this.contrasinal_usuario = contrasinal_usuario;
 		this.nick_usuario = nick_usuario;
 	}	
 	
@@ -39,11 +39,11 @@ public class Usuario {
 	public void setLogin_usuario(String login_usuario) {
 		this.login_usuario = login_usuario;
 	}
-	public String getContraseña_usuario() {
-		return contraseña_usuario;
+	public String getcontrasinal_usuario() {
+		return contrasinal_usuario;
 	}
-	public void setContraseña_usuario(String contraseña_usuario) {
-		this.contraseña_usuario = contraseña_usuario;
+	public void setcontrasinal_usuario(String contrasinal_usuario) {
+		this.contrasinal_usuario = contrasinal_usuario;
 	}
 	public String getNick_usuario() {
 		return nick_usuario;
@@ -55,7 +55,7 @@ public class Usuario {
 	@Override
 	public String toString() {
 		return "Usuario [nombre_usuario=" + nombre_usuario + ", apellidos_usuario=" + apellidos_usuario
-				+ ", login_usuario=" + login_usuario + ", contraseña_usuario=" + contraseña_usuario + ", nick_usuario="
+				+ ", login_usuario=" + login_usuario + ", contrasinal_usuario=" + contrasinal_usuario + ", nick_usuario="
 				+ nick_usuario + "]";
 	}
 
@@ -64,7 +64,7 @@ public class Usuario {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((apellidos_usuario == null) ? 0 : apellidos_usuario.hashCode());
-		result = prime * result + ((contraseña_usuario == null) ? 0 : contraseña_usuario.hashCode());
+		result = prime * result + ((contrasinal_usuario == null) ? 0 : contrasinal_usuario.hashCode());
 		result = prime * result + ((login_usuario == null) ? 0 : login_usuario.hashCode());
 		result = prime * result + ((nick_usuario == null) ? 0 : nick_usuario.hashCode());
 		result = prime * result + ((nombre_usuario == null) ? 0 : nombre_usuario.hashCode());
@@ -85,10 +85,10 @@ public class Usuario {
 				return false;
 		} else if (!apellidos_usuario.equals(other.apellidos_usuario))
 			return false;
-		if (contraseña_usuario == null) {
-			if (other.contraseña_usuario != null)
+		if (contrasinal_usuario == null) {
+			if (other.contrasinal_usuario != null)
 				return false;
-		} else if (!contraseña_usuario.equals(other.contraseña_usuario))
+		} else if (!contrasinal_usuario.equals(other.contrasinal_usuario))
 			return false;
 		if (login_usuario == null) {
 			if (other.login_usuario != null)

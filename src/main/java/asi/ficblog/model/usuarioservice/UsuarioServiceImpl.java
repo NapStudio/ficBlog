@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import asi.ficblog.model.blog.Blog;
+import asi.ficblog.model.blog.BlogDAO;
 import asi.ficblog.model.usuario.Usuario;
 import asi.ficblog.model.usuario.UsuarioDAO;
 import asi.ficblog.model.util.exceptions.InputValidationException;
@@ -21,11 +23,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 	
 	@Autowired
 	private UsuarioDAO usuarioDAO;
+	
+	@Autowired
+	private BlogDAO blogDAO;
 
 	
 	public void validarUsuario(Usuario usuario) throws InputValidationException{
 		PropertyValidator.validateMandatoryString("apellidos", usuario.getApellidos_usuario());
-		PropertyValidator.validateMandatoryString("contraseña", usuario.getContraseña_usuario());
+		PropertyValidator.validateMandatoryString("contrasinal", usuario.getcontrasinal_usuario());
 		PropertyValidator.validateMandatoryString("nick", usuario.getNick_usuario());
 		PropertyValidator.validateMandatoryString("login", usuario.getLogin_usuario());
 		PropertyValidator.validateMandatoryString("nombre", usuario.getNombre_usuario());
@@ -45,19 +50,30 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 	public void modificarUsuario(Usuario usuario) throws InputValidationException, InstanceNotFoundException {
 		validarUsuario(usuario);
-		System.out.println(usuario);
+		System.out.println("servicio "+usuario);
 		usuarioDAO.update(usuario);
 
 	}
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
-	public void eliminarUsuario(String login_usuario) throws InstanceNotFoundException {
-		usuarioDAO.remove(login_usuario);
+	public void eliminarUsuario(String login_usuario) throws InstanceNotFoundException{
+		List<Blog> blogs = new ArrayList<Blog>();
+		try {
+			blogs = blogDAO.findByUsuario(login_usuario);
+		} catch (InstanceNotFoundException e) {
+			//TODO crear excepcion singular
+			e.printStackTrace();
+		}
+		if(blogs!=null&&!blogs.isEmpty()){
+			//TODO crear excepcion singular
+			throw new InstanceNotFoundException();
+		}else{
+			usuarioDAO.remove(login_usuario);			
+		}		
 	}
-
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = false)
 	public void registrarUsuario(Usuario usuario) throws InputValidationException {
@@ -76,6 +92,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	public void setUsuarioDAO(UsuarioDAO usuarioDAO) {
 		this.usuarioDAO = usuarioDAO;
+	}
+
+	public BlogDAO getBlogDAO() {
+		return blogDAO;
+	}
+
+	public void setBlogDAO(BlogDAO blogDAO) {
+		this.blogDAO = blogDAO;
 	}
 	
 	

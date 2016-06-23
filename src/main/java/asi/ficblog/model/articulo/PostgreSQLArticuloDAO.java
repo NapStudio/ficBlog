@@ -2,34 +2,44 @@ package asi.ficblog.model.articulo;
 
 import java.util.List;
 
+
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 
 import asi.ficblog.model.util.exceptions.InstanceNotFoundException;
 
+@Repository
 public class PostgreSQLArticuloDAO implements ArticuloDAO {
-
+	
+	@Autowired
 	private NamedParameterJdbcOperations jdbcTemplate;
 
 	public void setJdbcTemplate(NamedParameterJdbcOperations jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	private static String CREATE_SQL = "INSERT INTO articulo (titulo_articulo, fecha_publicacion_articulo, texto_articulo, me_gusta_articulo, blog_articulo ) "
+	private static String CREATE_SQL = "INSERT INTO articulo (titulo_articulo, fecha_publicacion_articulo,"
+			+ " texto_articulo, me_gusta_articulo, blog_articulo ) "
 			+ "VALUES (:titulo_articulo, :fecha_publicacion_articulo, :texto_articulo, :me_gusta_articulo, :blog_articulo )";
 
-	private static String UPDATE_SQL = "UPDATE articulo SET titulo_articulo = :titulo_articulo, fecha_publicacion_articulo = :fecha_publicacion_articulo, "
+	private static String UPDATE_SQL = "UPDATE articulo SET titulo_articulo = :titulo_articulo, "
+			+ "fecha_publicacion_articulo = :fecha_publicacion_articulo, "
 			+ "texto_articulo = :texto_articulo, me_gusta_articulo = :me_gusta_articulo, blog_articulo = :blog_articulo "
 			+ "WHERE id_articulo = :id_articulo";
 
-	private static String GET_BYBLOG_SQL = "SELECT id_articulo, titulo_articulo, fecha_publicacion_articulo, texto_articulo, me_gusta_articulo, blog_articulo "
+	private static String GET_BYBLOG_SQL = "SELECT id_articulo, titulo_articulo, fecha_publicacion_articulo,"
+			+ " texto_articulo, me_gusta_articulo, blog_articulo "
 			+ "FROM articulo " + "WHERE blog_articulo = :blog_articulo";
 
-	private static String GET_SQL = "SELECT id_articulo, titulo_articulo, fecha_publicacion_articulo, texto_articulo, me_gusta_articulo, blog_articulo "
+	private static String GET_SQL = "SELECT id_articulo, titulo_articulo, fecha_publicacion_articulo,"
+			+ " texto_articulo, me_gusta_articulo, blog_articulo "
 			+ "FROM articulo " + "WHERE id_articulo = :id_articulo";
 
 	private static String DELETE_ALL_SQL = "DELETE FROM articulo WHERE blog_articulo = :blog_articulo";

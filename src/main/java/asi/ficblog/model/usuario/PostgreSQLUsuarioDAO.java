@@ -7,9 +7,11 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.stereotype.Repository;
 
 import asi.ficblog.model.util.exceptions.InstanceNotFoundException;
 
+@Repository
 public class PostgreSQLUsuarioDAO implements UsuarioDAO {
 	
 	@Autowired
@@ -19,16 +21,19 @@ public class PostgreSQLUsuarioDAO implements UsuarioDAO {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	private static String CREATE_SQL = "INSERT INTO usuario (nombre_usuario, apellidos_usuario, login_usuario, contraseña_usuario, nick_usuario) "
-			+ "VALUES (:nombre_usuario, :apellidos_usuario, :login_usuario, :contraseña_usuario, :nick_usuario)";
+	private static String CREATE_SQL = "INSERT INTO usuario (nombre_usuario, apellidos_usuario, login_usuario, contrasinal_usuario, nick_usuario) "
+			+ "VALUES (:nombre_usuario, :apellidos_usuario, :login_usuario, :contrasinal_usuario, :nick_usuario)";
+	
+	private static String CREATE_USERROLES_SQL="INSERT INTO UserRoles (login_usuario, role) "
+			+ "VALUES (:login_usuario, :role)";
 
 	private static String UPDATE_SQL = "UPDATE usuario SET nombre_usuario = :nombre_usuario, apellidos_usuario = :apellidos_usuario, "
-			+ "contraseña_usuario = :contraseña_usuario, nick_usuario = :nick_usuario "
+			+ "contrasinal_usuario = :contrasinal_usuario, nick_usuario = :nick_usuario "
 			+ "WHERE login_usuario = :login_usuario";
 	
 	private static String GET_ALL_SQL = 
 			"SELECT nombre_usuario, apellidos_usuario, login_usuario, "
-			+ "contraseña_usuario, nick_usuario "
+			+ "contrasinal_usuario, nick_usuario "
 			+ "FROM usuario ";
 
 	private static String GET_SQL = 
@@ -40,26 +45,39 @@ public class PostgreSQLUsuarioDAO implements UsuarioDAO {
 			+ "WHERE nombre_usuario = :nombre_usuario";
 
 	private static String DELETE_SQL = "DELETE FROM usuario WHERE login_usuario = :login_usuario";
+	
+	
+	private static String DELETE_USERROLES_SQL = "DELETE FROM UserRoles WHERE login_usuario = :login_usuario";
 
 	public Usuario insert(Usuario usuario) {
 		SqlParameterSource params = new MapSqlParameterSource()
 				.addValue("nombre_usuario", usuario.getNombre_usuario())
 				.addValue("apellidos_usuario", usuario.getApellidos_usuario())
 				.addValue("login_usuario", usuario.getLogin_usuario())
-				.addValue("contraseña_usuario", usuario.getContraseña_usuario())
-				.addValue("nick_usuario", usuario.getNick_usuario());
+				.addValue("contrasinal_usuario", usuario.getcontrasinal_usuario())
+				.addValue("nick_usuario", usuario.getNick_usuario())
+				.addValue("enabled", true);
 
 		jdbcTemplate.update(CREATE_SQL, params);
+		
+
+		SqlParameterSource params2 = new MapSqlParameterSource()
+				.addValue("login_usuario", usuario.getLogin_usuario())
+				.addValue("role", "ROLE_AUTHENTICATED");
+
+		jdbcTemplate.update(CREATE_USERROLES_SQL, params2);
+		
 
 		return usuario;
 	}
 
 	public Usuario update(Usuario usuario) throws InstanceNotFoundException {
+		System.out.println("Holaa soy e DAOOO" + usuario);
 		// TODO modificar login??
 		SqlParameterSource params = new MapSqlParameterSource()
 				.addValue("nombre_usuario", usuario.getNombre_usuario())
 				.addValue("apellidos_usuario", usuario.getApellidos_usuario())
-				.addValue("contraseña_usuario", usuario.getContraseña_usuario())
+				.addValue("contrasinal_usuario", usuario.getcontrasinal_usuario())
 				.addValue("nick_usuario", usuario.getNick_usuario())
 				.addValue("login_usuario", usuario.getLogin_usuario());
 
@@ -93,9 +111,11 @@ public class PostgreSQLUsuarioDAO implements UsuarioDAO {
 	}
 
 	public void remove(String login_usuario) throws InstanceNotFoundException {
+		
 		SqlParameterSource params = new MapSqlParameterSource().addValue(
 				"login_usuario", login_usuario);
 
+		jdbcTemplate.update(DELETE_USERROLES_SQL, params);
 		jdbcTemplate.update(DELETE_SQL, params);
 	}
 

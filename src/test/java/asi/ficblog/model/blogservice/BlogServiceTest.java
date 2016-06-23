@@ -198,7 +198,7 @@ public class BlogServiceTest {
 		try {
 			blog = getValidBlog();
 			articulo = blogService.crearArticulo("prueba 1", "esta es la prueba", blog.getId_blog());
-			Assert.assertEquals(articulo, blogService.buscarArticulo(articulo.getId_articulo()));
+			Assert.assertEquals(articulo.getId_articulo(), blogService.buscarArticulo(articulo.getId_articulo()).getId_articulo());
 		} finally {
 			blogService.eliminarArticulo(articulo.getId_articulo());
 		}
@@ -211,7 +211,7 @@ public class BlogServiceTest {
 		try {
 			blog = getValidBlog();
 			enlace = blogService.crearEnlace("prueba 1", "www.prueba.com", "video", blog.getId_blog());
-			Assert.assertEquals(enlace, blogService.buscarEnlace(enlace.getId_enlace()));
+			Assert.assertEquals(enlace.getId_enlace(), blogService.buscarEnlace(enlace.getId_enlace()).getId_enlace());
 		} finally {
 			blogService.eliminarEnlace(enlace.getId_enlace());
 		}

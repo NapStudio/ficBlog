@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 
@@ -45,3 +46,6 @@
 	</c:forEach>
 
 </table>
+<div style="margin: 10px 0;">
+	<a href="<c:url value="/"/>"><s:message code="usuarios.details.back"/></a>
+</div>

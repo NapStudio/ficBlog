@@ -110,9 +110,9 @@ public class PostgreSQLBlogDAO implements BlogDAO {
 	
 	
 
-	public List<Blog> findByUsuario(String usuario_blog) throws InstanceNotFoundException {
+	public List<Blog> findByUsuario(String login_usuario) throws InstanceNotFoundException {
 		SqlParameterSource params = new MapSqlParameterSource().
-				addValue("usuario_blog", usuario_blog);
+				addValue("usuario_blog", login_usuario);
 		return jdbcTemplate.query(GET_BYUSUARIO_SQL, params, new BlogRowMapper());		
 	}
 	

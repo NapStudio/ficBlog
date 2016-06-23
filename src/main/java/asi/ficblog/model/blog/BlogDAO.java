@@ -19,7 +19,7 @@ public interface BlogDAO {
 	 * 
 	 */
 	
-	public abstract List<Blog> findByUsuario(String usuario)
+	public abstract List<Blog> findByUsuario(String login_usuario)
 			throws InstanceNotFoundException;
 
 	/**

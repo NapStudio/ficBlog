@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 
@@ -9,13 +10,13 @@
 <div><i><s:message code="blogs.usuario"/>:</i> ${blog.usuario_blog}</div>
 <div><i><s:message code="blogs.date"/>:</i> ${blog.fecha_creacion_blog}</div>
 
-<c:url value="getEntradas" var="getEntradasURL">
+<c:url value="getEntradas" var="getEntradas">
 	<c:param name="id_blog" value="${blog.id_blog}" />
 </c:url>
 
 
 <div style="margin: 10px 0;">
-	<a href="${getEntradasURL}"><s:message code="blogs.details.entradas"/></a>
+	<a href="${getEntradas}"><s:message code="blogs.details.entradas"/></a>
 </div>
 
 <div style="margin: 10px 0;">

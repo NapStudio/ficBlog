@@ -2,17 +2,22 @@ package asi.ficblog.model.enlace;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 
 import asi.ficblog.model.util.exceptions.InstanceNotFoundException;
 
+
+@Repository
 public class PostgreSQLEnlaceDAO implements EnlaceDAO {
 
+	@Autowired
 	private NamedParameterJdbcOperations jdbcTemplate;
 
 	public void setJdbcTemplate(NamedParameterJdbcOperations jdbcTemplate) {
@@ -26,10 +31,12 @@ public class PostgreSQLEnlaceDAO implements EnlaceDAO {
 			+ " tipo_contenido_enlace = :tipo_contenido_enlace, me_gusta_enlace = :me_gusta_enlace, blog_enlace = :blog_enlace "
 			+ "WHERE id_enlace = :id_enlace";
 
-	private static String GET_BYBLOG_SQL = "SELECT id_enlace, titulo_enlace, fecha_publicacion_enlace, url_enlace, tipo_contenido_enlace, me_gusta_enlace, blog_enlace "
+	private static String GET_BYBLOG_SQL = "SELECT id_enlace, titulo_enlace, fecha_publicacion_enlace,"
+			+ " url_enlace, tipo_contenido_enlace, me_gusta_enlace, blog_enlace "
 			+ "FROM enlace " + "WHERE blog_enlace = :blog_enlace";
 
-	private static String GET_SQL = "SELECT id_enlace, titulo_enlace, fecha_publicacion_enlace, url_enlace, tipo_contenido_enlace, me_gusta_enlace, blog_enlace "
+	private static String GET_SQL = "SELECT id_enlace, titulo_enlace, fecha_publicacion_enlace,"
+			+ " url_enlace, tipo_contenido_enlace, me_gusta_enlace, blog_enlace "
 			+ "FROM enlace " + "WHERE id_enlace = :id_enlace";
 
 	private static String DELETE_ALL_SQL = "DELETE FROM enlace WHERE blog_enlace = :blog_enlace";

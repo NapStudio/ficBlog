@@ -75,6 +75,7 @@ public class BlogServiceImpl implements BlogService {
 
 	public Blog crearBlog(Blog blog) throws InputValidationException {
 		validarBlog(blog);
+		blog.setFecha_creacion_blog(new java.sql.Date(new Date().getTime()));
 		return blogDAO.insert(blog);
 	}
 
@@ -108,6 +109,7 @@ public class BlogServiceImpl implements BlogService {
 	public Articulo crearArticulo(Articulo articulo)
 			throws InputValidationException {
 		validarArticulo(articulo);
+		System.out.println("crear articulo: "+articulo);
 		return articuloDAO.insert(articulo);
 	}
 
@@ -185,32 +187,14 @@ public class BlogServiceImpl implements BlogService {
 		lista_articulos = articuloDAO.findByBlog(id_blog);
 		if (!lista_articulos.isEmpty()) {
 			lista_entradas.addAll(lista_articulos);
-			for (Entrada entrada : lista_entradas) {
-				System.out.println("Sin ordenar \n");
-				System.out.println(entrada);
-				System.out.println("\n");
-			}
-
 		}
 		lista_enlaces = enlaceDAO.findByBlog(id_blog);
 		if (!lista_enlaces.isEmpty()) {
 			lista_entradas.addAll(lista_enlaces);
-			for (Entrada entrada : lista_entradas) {
-				System.out.println("Sin ordenar \n");
-				System.out.println(entrada);
-				System.out.println("\n");
-			}
-			
-
 		}
 		if (!lista_entradas.isEmpty()) {
 			System.out.println(lista_entradas);
 			Collections.sort(lista_entradas);
-			for (Entrada entrada : lista_entradas) {
-					System.out.println("Ordenada \n");
-					System.out.println(entrada);
-					System.out.println("\n");
-				}
 		}
 
 		return lista_entradas;

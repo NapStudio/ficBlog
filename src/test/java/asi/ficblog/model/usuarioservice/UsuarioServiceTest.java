@@ -52,16 +52,18 @@ public class UsuarioServiceTest {
 		usuarioService.registrarUsuario(usuario);
 		
 
-		Usuario usuario2 = new Usuario("Alejandro", "Lopez","avazquez","123456", "alej");
-		usuarioService.modificarUsuario(usuario2);
 		Usuario aux=usuarioService.findUsuarioByLogin(usuario.getLogin_usuario());
-		
-		Assert.assertNotEquals(aux.getApellidos_usuario(), usuario.getApellidos_usuario());;
+		Assert.assertNotEquals(aux.getApellidos_usuario(), "zas");;
+		aux.setApellidos_usuario("zas");
+		usuarioService.modificarUsuario(aux);
+		Usuario aux2 = usuarioService.findUsuarioByLogin(usuario.getLogin_usuario());
+
+		Assert.assertEquals(aux2.getApellidos_usuario(), "zas");;
 		
 		
 		// Deletes the product
 		}finally{
-			usuarioService.eliminarUsuario(usuario.getLogin_usuario());
+//			usuarioService.eliminarUsuario(usuario.getLogin_usuario());
 		}
 	}
 	

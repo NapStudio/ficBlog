@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:sec="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 		http://www.springframework.org/schema/aop
@@ -17,6 +18,11 @@
 		http://www.springframework.org/schema/security/spring-security-4.0.xsd">
 
 
+	<context:annotation-config />
+	<context:component-scan base-package="asi.ficblog" />
+	<mvc:annotation-driven />
+	<tx:annotation-driven />
+
 	<!-- Data Source -->
 	<bean id="dataSourceBean" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
@@ -26,57 +32,27 @@
 		<property name="password" value="123456" />
 	</bean>
 
-
+	<!-- JBDC Template -->
 	<bean id="jdbcTemplate"
 		class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
 		<constructor-arg ref="dataSourceBean" />
 	</bean>
 
-	<!-- DAO implementations -->
-	<bean id="articuloDaoBean" class="asi.ficblog.model.articulo.PostgreSQLArticuloDAO">
-		<property name="jdbcTemplate" ref="jdbcTemplate" />
-	</bean>
-
-	<bean id="blogDaoBean" class="asi.ficblog.model.blog.PostgreSQLBlogDAO">
-		<property name="jdbcTemplate" ref="jdbcTemplate" />
-	</bean>
-
-	<bean id="usuarioDaoBean" class="asi.ficblog.model.usuario.PostgreSQLUsuarioDAO">
-		<property name="jdbcTemplate" ref="jdbcTemplate" />
-	</bean>
-
-	<bean id="enlaceDaoBean" class="asi.ficblog.model.enlace.PostgreSQLEnlaceDAO">
-		<property name="jdbcTemplate" ref="jdbcTemplate" />
-	</bean>
-
 	<!-- Transaction management -->
-	<bean id="transactionManagerBean"
+	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSourceBean" />
 	</bean>
 
-	<!-- UsuarioService -->
-	<bean id="usuarioServiceBean" class="asi.ficblog.model.usuarioservice.UsuarioServiceImpl">
-		<property name="usuarioDAO" ref="usuarioDaoBean" /> 
-	</bean>
+	<!-- Tiles configuration -->
+	<bean class="org.springframework.web.servlet.view.tiles3.TilesViewResolver" />
 
-	<!-- BlogService -->
-	<bean id="blogServiceBean" class="asi.ficblog.model.blogservice.BlogServiceImpl">
-		<property name="blogDAO" ref="blogDaoBean" />
-		<property name="enlaceDAO" ref="enlaceDaoBean" />
-		<property name="articuloDAO" ref="articuloDaoBean" />
-	</bean>
-
-
-	<!-- blog Controller -->
-	<bean name="/blog/*" class="asi.ficblog.web.blog.BlogController">
-		<property name="blogService" ref="blogServiceBean" />
-	</bean>
-
-
-	<!-- usuario Controller -->
-	<bean name="/usuario/*" class="asi.ficblog.web.usuario.UsuarioController">
-		<property name="usuarioService" ref="usuarioServiceBean" />
+	<bean class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/tiles/*.xml</value>
+			</list>
+		</property>
 	</bean>
 
 	<!-- View Resolver -->
@@ -87,8 +63,9 @@
 	</bean>
 
 
-
-
+	<!-- Web resources (CSS, img, etc.) -->
+	<mvc:resources mapping="/resources/**" location="/resources/"
+		cache-period="31556926" />
 
 	<!-- Internationalization -->
 	<bean id="localeResolver"
@@ -107,5 +84,37 @@
 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basename" value="classpath:messages" />
 	</bean>
+
+	<!-- Authentication -->
+
+	<!-- enable use-expressions -->
+	<sec:http auto-config="true" use-expressions="true">
+
+		<sec:intercept-url pattern="/blog/**"
+			access="hasRole('ROLE_AUTHENTICATED')" />
+
+		<!-- access denied page -->
+		<sec:access-denied-handler error-page="/403" />
+
+		<sec:form-login login-page="/login" default-target-url="/"
+			authentication-failure-url="/login?error" 
+			username-parameter="login_usuario"
+			password-parameter="contrasinal_usuario" />
+
+		<sec:logout logout-url="/logout" logout-success-url="/" />
+
+		<!-- enable CSRF protection -->
+		<sec:csrf />
+	</sec:http>
+
+	<!-- Select users and user_roles from database -->
+	<sec:authentication-manager>
+		<sec:authentication-provider>
+			<sec:jdbc-user-service id="userService"
+				data-source-ref="dataSourceBean"
+				users-by-username-query="SELECT login_usuario contrasinal_usuario enabled FROM usuario WHERE login_usuario = ?"
+				authorities-by-username-query="SELECT login_usuario role FROM UserRoles WHERE login_usuario = ?" />
+		</sec:authentication-provider>
+	</sec:authentication-manager>
 
 </beans>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+
+	<!-- HOME PAGE -->
+	<definition name="index" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/index.jsp" />
+	</definition>
+
+	<!-- User login -->
+	<definition name="login" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/usuario/login.jsp" />
+	</definition>
+
+	<definition name="403" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/util/403.jsp" />
+	</definition>
+
+	<!-- BLOG MANAGEMENT -->
+
+	<!-- List of Blogs -->
+	<definition name="blog/list" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/blog/list.jsp" />
+		<put-attribute name="title" value="List of blogs" />
+	</definition>
+
+	<!-- Blogs details -->
+	<definition name="blog/details" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/blog/details.jsp" />
+		<put-attribute name="title" expression="Blog details" />
+	</definition>
+
+	<!-- Add -->
+	<definition name="blog/add" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/blog/add.jsp" />
+		<put-attribute name="title" value="Add a new blog" />
+	</definition>
+
+	<!-- Update -->
+	<definition name="blog/update" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/blog/update.jsp" />
+		<put-attribute name="title" expression="Update a blog" />
+	</definition>
+
+	<!-- getEntradas -->
+	<definition name="blog/getEntradas" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/blog/getEntradas.jsp" />
+		<put-attribute name="title" expression="Entries" />
+	</definition>
+
+	<!-- BLOG MANAGEMENT -->
+
+	<!-- List of users -->
+	<definition name="usuario/list" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/usuario/list.jsp" />
+		<put-attribute name="title" expression="List of users" />
+	</definition>
+
+	<!-- User details -->
+	<definition name="usuario/details" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/usuario/details.jsp" />
+		<put-attribute name="title" expression="User details" />
+	</definition>
+
+	<!-- User update -->
+	<definition name="usuario/update" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/usuario/update.jsp" />
+		<put-attribute name="title" expression="update User details" />
+	</definition>
+
+	<!-- Add User -->
+	<definition name="usuario/add" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/usuario/add.jsp" />
+		<put-attribute name="title" expression="add user" />
+	</definition>
+
+
+
+
+
+
+
+
+</tiles-definitions>

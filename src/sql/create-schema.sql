@@ -1,5 +1,6 @@
 -- All tables are dropped before creating them again
 
+DROP TABLE IF EXISTS UserRoles;
 DROP TABLE IF EXISTS articulo;
 DROP TABLE IF EXISTS enlace;
 DROP TABLE IF EXISTS blog;
@@ -11,9 +12,20 @@ CREATE TABLE usuario (
 	nombre_usuario VARCHAR(20),
 	apellidos_usuario VARCHAR(20),
 	login_usuario VARCHAR(20) UNIQUE,
-	contraseña_usuario VARCHAR(20),
+	contrasinal_usuario VARCHAR(20),
 	nick_usuario VARCHAR(20),
+	enabled BOOLEAN,
 	CONSTRAINT usuario_pk PRIMARY KEY (login_usuario)
+);
+
+CREATE INDEX ON usuario(login_usuario);
+
+CREATE TABLE UserRoles (
+	userRoleId SERIAL,
+	login_usuario VARCHAR(16),
+	role VARCHAR(32),
+	CONSTRAINT UserRoles_pk PRIMARY KEY (userRoleId),
+	CONSTRAINT UserRoles_login_kf FOREIGN KEY (login_usuario) REFERENCES usuario(login_usuario)
 );
 
 

@@ -49,11 +49,11 @@
 		
 	<div>
 		<div class="tag">
-			<s:message code="usuarios.contrasena" />
+			<s:message code="usuarios.contrasinal" />
 		</div>
 		<div class="field">
-			<form:input path="contraseña_usuario" />
-			<form:errors path="contraseña_usuario" class="formerrors" />
+			<form:input path="contrasinal_usuario" />
+			<form:errors path="contrasinal_usuario" class="formerrors" />
 		</div>
 	</div>
 

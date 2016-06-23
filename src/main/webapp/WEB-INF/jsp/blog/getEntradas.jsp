@@ -1,7 +1,8 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 
-<h3><s:message code="blogs.list.title"/> #${id_blog}</h3>
+<h3><s:message code="blogs.list.title"/> #${blog.id_blog}</h3>
 
 <table border="1">
 	<tr>
