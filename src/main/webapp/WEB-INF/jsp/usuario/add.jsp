@@ -52,7 +52,7 @@
 			<s:message code="usuarios.contrasinal" />
 		</div>
 		<div class="field">
-			<form:input path="contrasinal_usuario" />
+			<form:password path="contrasinal_usuario" />
 			<form:errors path="contrasinal_usuario" class="formerrors" />
 		</div>
 	</div>

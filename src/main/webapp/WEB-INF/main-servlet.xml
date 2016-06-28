@@ -112,8 +112,8 @@
 		<sec:authentication-provider>
 			<sec:jdbc-user-service id="userService"
 				data-source-ref="dataSourceBean"
-				users-by-username-query="SELECT login_usuario contrasinal_usuario enabled FROM usuario WHERE login_usuario = ?"
-				authorities-by-username-query="SELECT login_usuario role FROM UserRoles WHERE login_usuario = ?" />
+				users-by-username-query="SELECT login_usuario, contrasinal_usuario, enabled FROM usuario WHERE login_usuario = ?"
+				authorities-by-username-query="SELECT login_usuario, role FROM UserRoles WHERE login_usuario = ?" />
 		</sec:authentication-provider>
 	</sec:authentication-manager>
 

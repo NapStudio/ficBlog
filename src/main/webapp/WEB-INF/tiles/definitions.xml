@@ -25,6 +25,13 @@
 		<put-attribute name="content" value="/WEB-INF/jsp/blog/list.jsp" />
 		<put-attribute name="title" value="List of blogs" />
 	</definition>
+	
+	<!-- 2 List of Blogs -->
+	<definition name="blog/regularList" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/blog/regularList.jsp" />
+		<put-attribute name="title" value="List of blogs" />
+	</definition>
+	
 
 	<!-- Blogs details -->
 	<definition name="blog/details" extends="defaultTemplate">

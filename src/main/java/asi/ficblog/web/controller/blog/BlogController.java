@@ -54,6 +54,13 @@ public class BlogController {
 			model.addAttribute("blogList", list);
 		}
 		
+		@RequestMapping(value = "/regularList", method = RequestMethod.GET)
+		public void regularList(Model model) {		
+			System.out.println("regularlist");
+			List<Blog> list = blogService.buscarTodosBlogs();
+			model.addAttribute("blogList", list);
+		}
+		
 		@RequestMapping(value = "/details", method = RequestMethod.GET)
 		public Model details(Long id_blog, Model model) throws InstanceNotFoundException, InputValidationException {
 			model.addAttribute(blogService.buscarBlog(id_blog));

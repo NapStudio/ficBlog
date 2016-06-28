@@ -2,7 +2,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags"%>
 
-<form name='login'
+<form name='login_usuario'
 	action="<c:url value='/login' />" method='POST'>
 	
 	<div>
@@ -28,7 +28,11 @@
 	<div>
 		<input type="submit" value=<s:message code="usuarios.login.button"/>>
 	</div>
-
+	<h4>
+	<div>		
+		<a href="<c:url value="/usuario/addUsuarioForm"/>"><s:message code="usuarios.new"/></a>
+	</div>
+	</h4>
 	<input type="hidden" name="${_csrf.parameterName}"
 		value="${_csrf.token}" />
 

@@ -30,6 +30,9 @@ public interface UsuarioDAO {
 	 * @return El asi.ficblog.model.usuario creado.
 	 */
 	public abstract Usuario insert(	Usuario usuario);
+	
+	
+	//public abstract void insertRole(String login);
 
 	/**
 	 * Actualiza la información de un asi.ficblog.model.usuario dado.

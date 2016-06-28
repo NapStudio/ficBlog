@@ -32,6 +32,21 @@
 							code="menu.blogs" /></a> &nbsp;
 
 				</sec:authorize>
+				<sec:authorize access="isAuthenticated()">
+					<c:set var="username">
+							<sec:authentication property="principal.username" /> 
+					</c:set>				
+					<c:set var="message">
+					<s:message code="usuarios.details"/>
+					</c:set>				
+					
+
+					<c:url value="/usuario/details" var="detailsURL">
+						<c:param name="login_usuario" value="${username}" />
+					</c:url>				
+					<a href="${detailsURL}">${message} of ${username}</a> &nbsp;
+
+				</sec:authorize>
 
 				<!-- The user is not authenticated -->
 				<sec:authorize access="not isAuthenticated()">

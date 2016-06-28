@@ -19,18 +19,19 @@ public class MainController {
 			@RequestParam(value = "logout", required = false) String logout) {
 		
 		ModelAndView mav = new ModelAndView();
-		
+		System.out.println("loginForm in...");
 		if (error != null) {
-			mav.addObject("error", "users.login.error");
+			mav.addObject("error", "usuarios.login.error");
+			System.out.println("error in loginForm!");
 		}
 		
 		if (logout != null) {
-			mav.addObject("msg", "users.login.logoutmessage");
+			mav.addObject("msg", "usuarios.login.logoutmessage");
 		}
 		
 		
-		mav.addObject("login",  new String());
-		mav.addObject("password",  new String());
+		mav.addObject("login_usuario",  new String());
+		mav.addObject("contrasinal_usuario",  new String());
 		
 		mav.setViewName("login");
 		

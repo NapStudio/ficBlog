@@ -8,6 +8,7 @@
 	<tr>
 		<th><s:message code="entrada.title"/></th>
 		<th><s:message code="entrada.date"/></th>
+		<th><s:message code="entrada.me_gusta"/></th>
 	</tr>
 
 	<c:forEach var="entrada" items="${entradaList}" varStatus="status">
@@ -18,21 +19,14 @@
 		<tr>
 			<td>${entrada.titulo_entrada}</td>
 			<td>${entrada.fecha_publicacion_entrada}</td>
+			<td>${entrada.me_gusta_entrada}</td>
 		</tr>
-		
-		<td>${entrada.texto_articulo}</td>
-		
 		</c:if>		
 		<c:if test="${entrada['class'] eq 'class asi.ficblog.model.enlace.Enlace'}">
-		
 		<tr>
 	    	<td>${entrada.titulo_entrada}</td>
 			<td>${entrada.fecha_publicacion_entrada}</td>
-		</tr>
-		
-		<tr>
-			<td><a href=${entrada.url_enlace}>${entrada.url_enlace}</a></td>
-			<td>${entrada.tipo_contenido_enlace}</td>
+			<td>${entrada.me_gusta_entrada}</td>
 		</tr>
 		</c:if>		
 
@@ -45,7 +39,7 @@
 </c:url>
 
 <div style="margin: 10px 0;">
-	<a href="regularList"><s:message code="blogs.details.back"/></a>
+	<a href="${detailsURL}"><s:message code="blogs.details.back"/></a>
 </div>
 
 
