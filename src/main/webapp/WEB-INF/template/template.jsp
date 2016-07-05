@@ -43,7 +43,8 @@
 
 					<c:url value="/usuario/details" var="detailsURL">
 						<c:param name="login_usuario" value="${username}" />
-					</c:url>				
+					</c:url>			
+						
 					<a href="${detailsURL}">${message} of ${username}</a> &nbsp;
 
 				</sec:authorize>

@@ -4,7 +4,7 @@
 <h3>Update usuario with login: #${usuario.login_usuario}</h3>
 
 <form:form action="updateUsuario" modelAttribute="usuario">
-	<!--<form:hidden path="login_usuario"/>-->
+	<form:hidden path="login_usuario"/>
 	
 	<div>
 		<div class="tag">Nombre</div>
@@ -23,12 +23,6 @@
 		<div class="tag">Nick</div>
 		<div class="field"><form:input path="nick_usuario"/>
 			<form:errors path="nick_usuario" class="formerrors"/></div>
-	</div>
-			
-	<div>
-		<div class="tag">Login</div>
-		<div class="field"><form:input path="login_usuario"/>
-			<form:errors path="login_usuario" class="formerrors"/></div>
 	</div>
 	
 	<div>

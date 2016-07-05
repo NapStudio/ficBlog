@@ -22,7 +22,7 @@ CREATE INDEX ON usuario(login_usuario);
 
 CREATE TABLE UserRoles (
 	userRoleId SERIAL,
-	login_usuario VARCHAR(16),
+	login_usuario VARCHAR(20),
 	role VARCHAR(32),
 	CONSTRAINT UserRoles_pk PRIMARY KEY (userRoleId),
 	CONSTRAINT UserRoles_login_kf FOREIGN KEY (login_usuario) REFERENCES usuario(login_usuario)
@@ -49,9 +49,9 @@ CREATE SEQUENCE articulo_id_seq;
 
 CREATE TABLE articulo (
 	id_articulo BIGINT DEFAULT NEXTVAL('articulo_id_seq'),
-	titulo_articulo VARCHAR(20),
+	titulo_articulo VARCHAR(100),
 	fecha_publicacion_articulo TIMESTAMP,
-	texto_articulo VARCHAR(100),
+	texto_articulo VARCHAR(1500),
 	me_gusta_articulo BOOLEAN,
 	blog_articulo BIGINT,
 	CONSTRAINT articulo_pk PRIMARY KEY (id_articulo),
@@ -64,9 +64,9 @@ CREATE SEQUENCE enlace_id_seq;
 
 CREATE TABLE enlace (
 	id_enlace BIGINT DEFAULT NEXTVAL('enlace_id_seq'),
-	titulo_enlace VARCHAR(20),
+	titulo_enlace VARCHAR(100),
 	fecha_publicacion_enlace TIMESTAMP,
-	url_enlace VARCHAR(20),
+	url_enlace VARCHAR(100),
 	tipo_contenido_enlace VARCHAR(20),
 	me_gusta_enlace BOOLEAN,
 	blog_enlace BIGINT,

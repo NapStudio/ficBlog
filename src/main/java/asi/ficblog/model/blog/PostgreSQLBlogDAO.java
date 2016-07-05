@@ -117,9 +117,7 @@ public class PostgreSQLBlogDAO implements BlogDAO {
 	}
 	
 	public List<Blog> getAll() {
-		System.out.println("getAll");
 		List<Blog> blogs=jdbcTemplate.query(GET_ALL_SQL, new BlogRowMapper());	
-		System.out.println(blogs);
 		return blogs;
 	}	
 

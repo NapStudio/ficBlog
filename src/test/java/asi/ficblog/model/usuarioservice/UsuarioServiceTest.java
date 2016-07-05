@@ -17,7 +17,6 @@ import asi.ficblog.model.util.exceptions.InstanceNotFoundException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/spring-module.xml")
-@TransactionConfiguration
 @Transactional
 public class UsuarioServiceTest {
 	

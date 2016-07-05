@@ -55,6 +55,8 @@ public class PostgreSQLEnlaceDAO implements EnlaceDAO {
 						enlace.getTipo_contenido_enlace())
 				.addValue("blog_enlace", enlace.getBlog_enlace());
 
+		System.out.println("\n insertando fecha:");
+		System.out.println(enlace.getFecha_publicacion_entrada());
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
 		jdbcTemplate.update(CREATE_SQL, params, keyHolder,

@@ -25,16 +25,16 @@ public class UsuarioValidator implements Validator {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "contrasinal_usuario", "error.usuarios.contrasinal.empty");
 		
 		if (usuario.getLogin_usuario() != null && ! usuario.getLogin_usuario().equals("") &&
-				usuario.getLogin_usuario().length() < 10) {
+				usuario.getLogin_usuario().length() < 5) {
 			errors.rejectValue("login_usuario", "error.usuarios.login.tooshort");
 		}
 		if (usuario.getNick_usuario() != null && ! usuario.getNick_usuario().equals("") &&
 				usuario.getNick_usuario().length() < 5) {
-			errors.rejectValue("nick_usuario", "error.usuarios.login.tooshort");
+			errors.rejectValue("nick_usuario", "error.usuarios.nick.tooshort");
 		}
 		if (usuario.getcontrasinal_usuario() != null && ! usuario.getcontrasinal_usuario().equals("") &&
 				usuario.getcontrasinal_usuario().length() < 8) {
-			errors.rejectValue("contrasinal_usuario", "error.usuarios.login.tooshort");
+			errors.rejectValue("contrasinal_usuario", "error.usuarios.contrasinal.tooshort");
 		}
 		
 	}

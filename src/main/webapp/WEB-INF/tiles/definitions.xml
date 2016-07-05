@@ -26,12 +26,6 @@
 		<put-attribute name="title" value="List of blogs" />
 	</definition>
 	
-	<!-- 2 List of Blogs -->
-	<definition name="blog/regularList" extends="defaultTemplate">
-		<put-attribute name="content" value="/WEB-INF/jsp/blog/regularList.jsp" />
-		<put-attribute name="title" value="List of blogs" />
-	</definition>
-	
 
 	<!-- Blogs details -->
 	<definition name="blog/details" extends="defaultTemplate">
@@ -50,6 +44,8 @@
 		<put-attribute name="content" value="/WEB-INF/jsp/blog/update.jsp" />
 		<put-attribute name="title" expression="Update a blog" />
 	</definition>
+	
+	<!-- Entradas management -->
 
 	<!-- getEntradas -->
 	<definition name="blog/getEntradas" extends="defaultTemplate">
@@ -57,7 +53,20 @@
 		<put-attribute name="title" expression="Entries" />
 	</definition>
 
-	<!-- BLOG MANAGEMENT -->
+	<!-- Add Articulo -->
+	<definition name="blog/addArticulo" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/blog/addArticulo.jsp" />
+		<put-attribute name="title" expression="Add an Article" />
+	</definition>
+
+	<!-- Add Enlace -->
+	<definition name="blog/addEnlace" extends="defaultTemplate">
+		<put-attribute name="content" value="/WEB-INF/jsp/blog/addEnlace.jsp" />
+		<put-attribute name="title" expression="Add link" />
+	</definition>
+	
+
+	<!-- User MANAGEMENT -->
 
 	<!-- List of users -->
 	<definition name="usuario/list" extends="defaultTemplate">

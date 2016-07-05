@@ -4,9 +4,7 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import asi.ficblog.model.usuario.Usuario;
-
-public class Blog {	
+public class Blog implements Comparable<Blog>{	
 	
 	private Long id_blog;
 	private String titulo_blog;
@@ -116,7 +114,22 @@ public class Blog {
 		return true;
 	}
 
-	
+
+	public int compareTo(Blog other) {
+	    if (getFecha_creacion_blog() == null) {
+	        return (other.getFecha_creacion_blog() == null) ? 0 : -1;
+	    }
+	    if (other.getFecha_creacion_blog() == null) {
+	        return 1;
+	    }
+	    if(other.getFecha_creacion_blog().before(getFecha_creacion_blog())){
+	    	return -1;
+	    }else if(other.getFecha_creacion_blog().after(getFecha_creacion_blog())){
+	    	return 1;
+	    }
+	    return 0;
+	}
+
 	
 	
 }

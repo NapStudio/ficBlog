@@ -4,6 +4,6 @@
 <div><s:message code="home.welcome"/></div> 
 
 <div style="margin: 10px 0;">
-	<s:message code="home.startwith"/><a href="<c:url value="blog/regularList"/>"><s:message code="home.listofblogs"/></a>
+	<s:message code="home.startwith"/><a href="<c:url value="blog/list"/>"><s:message code="home.listofblogs"/></a>
 </div>
 

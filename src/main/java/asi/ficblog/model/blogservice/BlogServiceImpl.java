@@ -66,7 +66,8 @@ public class BlogServiceImpl implements BlogService {
 	public Blog crearBlog(Usuario usuario_blog, String nombre_blog)
 			throws InputValidationException {
 
-		date = new java.sql.Date(new Date().getTime());
+		date = new Date();
+		System.out.println("date en crearBlogservice: "+date);
 		Blog blog = new Blog(nombre_blog, date, usuario_blog.getLogin_usuario());
 		validarBlog(blog);
 		return blogDAO.insert(blog);
@@ -102,6 +103,7 @@ public class BlogServiceImpl implements BlogService {
 		date = new java.sql.Date(new Date().getTime());
 		Articulo articulo = new Articulo(titulo_articulo, date, texto_articulo,
 				id_blog);
+		System.out.println(date);
 		validarArticulo(articulo);
 		return articuloDAO.insert(articulo);
 	}
@@ -109,6 +111,8 @@ public class BlogServiceImpl implements BlogService {
 	public Articulo crearArticulo(Articulo articulo)
 			throws InputValidationException {
 		validarArticulo(articulo);
+		date = new Date();
+		articulo.setFecha_publicacion_entrada(date);
 		System.out.println("crear articulo: "+articulo);
 		return articuloDAO.insert(articulo);
 	}
@@ -116,16 +120,17 @@ public class BlogServiceImpl implements BlogService {
 	public Enlace crearEnlace(String titulo_enlace, String url_enlace,
 			String tipo_contenido, Long id_blog)
 			throws InputValidationException {
-		date = new java.sql.Date(new Date().getTime());
+		date = new Date();
 		Enlace enlace = new Enlace(titulo_enlace, date, url_enlace,
 				tipo_contenido, id_blog);
-		validarEnlace(enlace);
 		return enlaceDAO.insert(enlace);
 	}
 
 	public Enlace crearEnlace(Enlace enlace) throws InputValidationException,
 			InputValidationException {
 		validarEnlace(enlace);
+		date = new Date();
+		enlace.setFecha_publicacion_entrada(date);
 		return enlaceDAO.insert(enlace);
 	}
 
@@ -219,8 +224,9 @@ public class BlogServiceImpl implements BlogService {
 
 	@Transactional(readOnly = true)
 	public List<Blog> buscarTodosBlogs() {
-		System.out.println("buscar todos blogs");
-		return blogDAO.getAll();
+		List<Blog> blogs=blogDAO.getAll();
+		Collections.sort(blogs);
+		return blogs;
 	}
 
 	public void eliminarTodosBlogs() throws InstanceNotFoundException {
