@@ -62,7 +62,7 @@ public class BlogController {
 
 	@InitBinder
 	public void bindingPreparation(WebDataBinder binder) {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		CustomDateEditor orderDateEditor = new CustomDateEditor(dateFormat,
 				true);
 		binder.registerCustomEditor(Date.class, orderDateEditor);
@@ -72,19 +72,20 @@ public class BlogController {
 	public void list(String login_usuario, Model model) {
 		System.out.println("list in blogcontroller");
 		List<Blog> list = blogService.buscarTodosBlogs();
-		if(login_usuario != null ){
-			List<Blog> blogs= new ArrayList<Blog>();
-			for(Blog b:list){
-				System.out.println("usuario: "+b.getUsuario_blog()+" o "+login_usuario);
-				if(b.getUsuario_blog().equals(login_usuario)){
+		if (login_usuario != null) {
+			List<Blog> blogs = new ArrayList<Blog>();
+			for (Blog b : list) {
+				System.out.println("usuario: " + b.getUsuario_blog() + " o "
+						+ login_usuario);
+				if (b.getUsuario_blog().equals(login_usuario)) {
 					blogs.add(b);
 				}
 			}
 			model.addAttribute("blogList", blogs);
-		}else{
+		} else {
 			model.addAttribute("blogList", list);
 		}
-		
+
 	}
 
 	@RequestMapping(value = "/details", method = RequestMethod.GET)
@@ -134,6 +135,27 @@ public class BlogController {
 		return "redirect:/blog/list";
 	}
 
+	@RequestMapping(value = "articulo/meGusta", method = RequestMethod.GET)
+	public String meGustaArticulo(Long id_articulo, String login_usuario)
+			throws InstanceNotFoundException, InputValidationException {
+		blogService.meGustaArticulo(id_articulo, login_usuario);
+		Long id_blog = (blogService.buscarArticulo(id_articulo)
+				.getBlog_articulo());
+		String ownerBlog = blogService.buscarBlog(id_blog).getUsuario_blog();
+		return "redirect:/blog/getEntradas?id_blog=" + id_blog
+				+ "&usuario_blog=" + ownerBlog;
+	}
+
+	@RequestMapping(value = "enlace/meGusta", method = RequestMethod.GET)
+	public String meGustaEnlace(Long id_enlace, String login_usuario)
+			throws InstanceNotFoundException, InputValidationException {
+		blogService.meGustaEnlace(id_enlace, login_usuario);
+		Long id_blog = (blogService.buscarEnlace(id_enlace).getBlog_enlace());
+		String ownerBlog = blogService.buscarBlog(id_blog).getUsuario_blog();
+		return "redirect:/blog/getEntradas?id_blog=" + id_blog
+				+ "&usuario_blog=" + ownerBlog;
+	}
+
 	@RequestMapping(value = "/addArticuloForm", method = RequestMethod.GET)
 	public ModelAndView addArticuloForm(Long id_blog, ModelAndView modelAndView) {
 		Articulo articulo = new Articulo();
@@ -145,7 +167,8 @@ public class BlogController {
 
 	@RequestMapping(value = "/addArticulo", method = RequestMethod.POST)
 	public String addArticulo(@Validated Articulo articulo,
-			BindingResult result, Model model) throws InputValidationException {
+			BindingResult result, Model model) throws InputValidationException,
+			InstanceNotFoundException {
 
 		if (result.hasErrors()) {
 
@@ -155,17 +178,22 @@ public class BlogController {
 		} else {
 			System.out.println(articulo);
 			blogService.crearArticulo(articulo);
-
+			Blog blog = blogService.buscarBlog(articulo.getBlog_articulo());
 			return "redirect:/blog/getEntradas?id_blog="
-					+ articulo.getBlog_articulo();
+					+ articulo.getBlog_articulo() + "&usuario_blog="
+					+ blog.getUsuario_blog();
 		}
 	}
 
 	@RequestMapping(value = "/articulo/delete", method = RequestMethod.GET)
-	public String deleteArticulo(Long id_articulo) throws InstanceNotFoundException,
-			InputValidationException {
+	public String deleteArticulo(Long id_articulo)
+			throws InstanceNotFoundException, InputValidationException {
+		Blog blog = blogService.buscarBlog(blogService.buscarArticulo(
+				id_articulo).getBlog_articulo());
 		blogService.eliminarArticulo(id_articulo);
-		return "redirect:/blog/list";
+		return "redirect:/blog/getEntradas?id_blog="
+					+ blog.getId_blog() + "&usuario_blog="
+					+ blog.getUsuario_blog();
 	}
 
 	@RequestMapping(value = "/addEnlaceForm", method = RequestMethod.GET)
@@ -196,10 +224,14 @@ public class BlogController {
 	}
 
 	@RequestMapping(value = "/enlace/delete", method = RequestMethod.GET)
-	public String deleteEnlace(Long id_enlace) throws InstanceNotFoundException,
-			InputValidationException {
+	public String deleteEnlace(Long id_enlace)
+			throws InstanceNotFoundException, InputValidationException {
+		Blog blog = blogService.buscarBlog(blogService.buscarEnlace(
+				id_enlace).getBlog_enlace());
 		blogService.eliminarEnlace(id_enlace);
-		return "redirect:/blog/list";
+		return "redirect:/blog/getEntradas?id_blog="
+		+ blog.getId_blog() + "&usuario_blog="
+		+ blog.getUsuario_blog();
 	}
 
 	public BlogService getBlogService() {

@@ -2,7 +2,7 @@ package asi.ficblog.model.blogservice;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import asi.ficblog.model.entrada.Entrada;
 import asi.ficblog.model.usuario.Usuario;
 import asi.ficblog.model.util.exceptions.InputValidationException;
 import asi.ficblog.model.util.exceptions.InstanceNotFoundException;
-import asi.ficblog.model.util.validator.PropertyValidator;
+import asi.ficblog.model.util.validator.EntityValidator;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED, readOnly = false)
@@ -35,48 +35,22 @@ public class BlogServiceImpl implements BlogService {
 	@Autowired
 	private ArticuloDAO articuloDAO;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	Date date;
-
-	public void validarBlog(Blog blog) throws InputValidationException {
-		PropertyValidator.validateMandatoryString("title",
-				blog.getTitulo_blog());
-		PropertyValidator.validateMandatoryString("usuario",
-				blog.getUsuario_blog());
-	}
-
-	public void validarArticulo(Articulo articulo)
-			throws InputValidationException {
-		PropertyValidator.validateMandatoryString("texto",
-				articulo.getTexto_articulo());
-		PropertyValidator.validateMandatoryString("articulo",
-				articulo.getTitulo_entrada());
-		PropertyValidator.validateNotNegativeLong("idBlog",
-				articulo.getBlog_articulo());
-	}
-
-	public void validarEnlace(Enlace enlace) throws InputValidationException {
-		PropertyValidator.validateMandatoryString("titulo",
-				enlace.getTitulo_entrada());
-		PropertyValidator.validateMandatoryString("enlace",
-				enlace.getUrl_enlace());
-		PropertyValidator.validateNotNegativeLong("idBlog",
-				enlace.getBlog_enlace());
-	}
-
+	Calendar date;
+	
 	public Blog crearBlog(Usuario usuario_blog, String nombre_blog)
 			throws InputValidationException {
 
-		date = new Date();
-		System.out.println("date en crearBlogservice: "+date);
+		date = Calendar.getInstance();
+		System.out.println("date en crearBlogservice: " + date);
 		Blog blog = new Blog(nombre_blog, date, usuario_blog.getLogin_usuario());
-		validarBlog(blog);
+		EntityValidator.validarBlog(blog);
 		return blogDAO.insert(blog);
 
 	}
 
 	public Blog crearBlog(Blog blog) throws InputValidationException {
-		validarBlog(blog);
-		blog.setFecha_creacion_blog(new java.sql.Date(new Date().getTime()));
+		EntityValidator.validarBlog(blog);
+		blog.setFecha_creacion_blog(Calendar.getInstance());
 		return blogDAO.insert(blog);
 	}
 
@@ -93,34 +67,34 @@ public class BlogServiceImpl implements BlogService {
 	public void cambiarTituloBlog(Blog blog, String nuevo_nombre)
 			throws InputValidationException {
 		blog.setTitulo_blog(nuevo_nombre);
-		validarBlog(blog);
+		EntityValidator.validarBlog(blog);
 		blogDAO.update(blog);
 	}
 
 	public Articulo crearArticulo(String titulo_articulo,
 			String texto_articulo, Long id_blog)
 			throws InputValidationException {
-		date = new java.sql.Date(new Date().getTime());
+		date = Calendar.getInstance();
 		Articulo articulo = new Articulo(titulo_articulo, date, texto_articulo,
 				id_blog);
 		System.out.println(date);
-		validarArticulo(articulo);
+		EntityValidator.validarArticulo(articulo);
 		return articuloDAO.insert(articulo);
 	}
 
 	public Articulo crearArticulo(Articulo articulo)
 			throws InputValidationException {
-		validarArticulo(articulo);
-		date = new Date();
+		EntityValidator.validarArticulo(articulo);
+		date = Calendar.getInstance();
 		articulo.setFecha_publicacion_entrada(date);
-		System.out.println("crear articulo: "+articulo);
+		System.out.println("crear articulo: " + articulo);
 		return articuloDAO.insert(articulo);
 	}
 
 	public Enlace crearEnlace(String titulo_enlace, String url_enlace,
 			String tipo_contenido, Long id_blog)
 			throws InputValidationException {
-		date = new Date();
+		date = Calendar.getInstance();
 		Enlace enlace = new Enlace(titulo_enlace, date, url_enlace,
 				tipo_contenido, id_blog);
 		return enlaceDAO.insert(enlace);
@@ -128,8 +102,8 @@ public class BlogServiceImpl implements BlogService {
 
 	public Enlace crearEnlace(Enlace enlace) throws InputValidationException,
 			InputValidationException {
-		validarEnlace(enlace);
-		date = new Date();
+		EntityValidator.validarEnlace(enlace);
+		date = Calendar.getInstance();
 		enlace.setFecha_publicacion_entrada(date);
 		return enlaceDAO.insert(enlace);
 	}
@@ -141,14 +115,14 @@ public class BlogServiceImpl implements BlogService {
 		Articulo articulo = articuloDAO.find(id_articulo);
 		articulo.setTitulo_entrada(nuevo_titulo_articulo);
 		articulo.setTexto_articulo(nuevo_texto_articulo);
-		validarArticulo(articulo);
+		EntityValidator.validarArticulo(articulo);
 		articuloDAO.update(articulo);
 	}
 
 	@Transactional(isolation = Isolation.SERIALIZABLE)
 	public void modificarArticulo(Articulo articulo)
 			throws InstanceNotFoundException, InputValidationException {
-		validarArticulo(articulo);
+		EntityValidator.validarArticulo(articulo);
 		articuloDAO.update(articulo);
 	}
 
@@ -160,14 +134,14 @@ public class BlogServiceImpl implements BlogService {
 		enlace.setTitulo_entrada(titulo_enlace);
 		enlace.setUrl_enlace(url_enlace);
 		enlace.setTipo_contenido_enlace(tipo_contenido);
-		validarEnlace(enlace);
+		EntityValidator.validarEnlace(enlace);
 		enlaceDAO.update(enlace);
 	}
 
 	@Transactional(isolation = Isolation.SERIALIZABLE)
 	public void modificarEnlace(Enlace enlace)
 			throws InstanceNotFoundException, InputValidationException {
-		validarEnlace(enlace);
+		EntityValidator.validarEnlace(enlace);
 		enlaceDAO.update(enlace);
 	}
 
@@ -224,17 +198,33 @@ public class BlogServiceImpl implements BlogService {
 
 	@Transactional(readOnly = true)
 	public List<Blog> buscarTodosBlogs() {
-		List<Blog> blogs=blogDAO.getAll();
+		List<Blog> blogs = blogDAO.getAll();
 		Collections.sort(blogs);
 		return blogs;
 	}
 
 	public void eliminarTodosBlogs() throws InstanceNotFoundException {
-		List<Blog> blogs= buscarTodosBlogs();	
-		for(Blog blog:blogs){
+		List<Blog> blogs = buscarTodosBlogs();
+		for (Blog blog : blogs) {
 			eliminarEntradasBlog(blog.getId_blog());
 			eliminarBlog(blog.getId_blog());
 		}
+	}
+
+	public void meGustaArticulo(Long id_articulo, String login_usuario)
+			throws InstanceNotFoundException {
+		if (!articuloDAO.findUsuarioGustaArticulo(id_articulo, login_usuario)) {
+			articuloDAO.meGustaArticulo(id_articulo, login_usuario);
+		}
+
+	}
+
+	public void meGustaEnlace(Long id_enlace, String login_usuario)
+			throws InstanceNotFoundException {
+		if (!articuloDAO.findUsuarioGustaArticulo(id_enlace, login_usuario)) {
+			enlaceDAO.meGustaEnlace(id_enlace, login_usuario);
+		}
+
 	}
 
 	public BlogDAO getBlogDAO() {
@@ -260,7 +250,5 @@ public class BlogServiceImpl implements BlogService {
 	public void setArticuloDAO(ArticuloDAO articuloDAO) {
 		this.articuloDAO = articuloDAO;
 	}
-	
-	
 
 }

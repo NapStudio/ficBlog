@@ -2,8 +2,6 @@ package asi.ficblog.model.articulo;
 
 import java.util.List;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -17,7 +15,7 @@ import asi.ficblog.model.util.exceptions.InstanceNotFoundException;
 
 @Repository
 public class PostgreSQLArticuloDAO implements ArticuloDAO {
-	
+
 	@Autowired
 	private NamedParameterJdbcOperations jdbcTemplate;
 
@@ -31,7 +29,7 @@ public class PostgreSQLArticuloDAO implements ArticuloDAO {
 
 	private static String UPDATE_SQL = "UPDATE articulo SET titulo_articulo = :titulo_articulo, "
 			+ "fecha_publicacion_articulo = :fecha_publicacion_articulo, "
-			+ "texto_articulo = :texto_articulo, me_gusta_articulo = :me_gusta_articulo, blog_articulo = :blog_articulo "
+			+ "texto_articulo = :texto_articulo, blog_articulo = :blog_articulo "
 			+ "WHERE id_articulo = :id_articulo";
 
 	private static String GET_BYBLOG_SQL = "SELECT id_articulo, titulo_articulo, fecha_publicacion_articulo,"
@@ -46,6 +44,15 @@ public class PostgreSQLArticuloDAO implements ArticuloDAO {
 
 	private static String DELETE_SQL = "DELETE FROM articulo WHERE id_articulo = :id_articulo";
 
+	private static String CREATE_MEGUSTA_SQL = "INSERT INTO megusta(id_articulo, login_usuario) VALUES (:id_articulo, :login_usuario)";
+
+	private static String INCREASE_MEGUSTA_SQL = "UPDATE articulo SET me_gusta_articulo = me_gusta_articulo+1"
+			+ "WHERE id_articulo = :id_articulo";
+
+	private static String GET_MEGUSTA_SQL = "SELECT COUNT(*) FROM megusta"
+			+ " WHERE id_articulo = :id_articulo AND"
+			+ " login_usuario = :login_usuario";
+
 	public Articulo insert(Articulo articulo) {
 
 		SqlParameterSource params = new MapSqlParameterSource()
@@ -53,10 +60,8 @@ public class PostgreSQLArticuloDAO implements ArticuloDAO {
 				.addValue("fecha_publicacion_articulo",
 						articulo.getFecha_publicacion_entrada())
 				.addValue("texto_articulo", articulo.getTexto_articulo())
-				.addValue("me_gusta_articulo", articulo.isMe_gusta_entrada())
+				.addValue("me_gusta_articulo", 0)
 				.addValue("blog_articulo", articulo.getBlog_articulo());
-		
-		
 
 		KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -64,8 +69,8 @@ public class PostgreSQLArticuloDAO implements ArticuloDAO {
 				new String[] { "id_articulo" });
 
 		articulo.setId_articulo(keyHolder.getKey().longValue());
-		
-		System.out.println("articulo insert: "+articulo);
+
+		System.out.println("articulo insert: " + articulo);
 
 		return articulo;
 
@@ -77,7 +82,6 @@ public class PostgreSQLArticuloDAO implements ArticuloDAO {
 				.addValue("fecha_publicacion_articulo",
 						articulo.getFecha_publicacion_entrada())
 				.addValue("texto_articulo", articulo.getTexto_articulo())
-				.addValue("me_gusta_articulo", articulo.isMe_gusta_entrada())
 				.addValue("id_articulo", articulo.getId_articulo())
 				.addValue("blog_articulo", articulo.getBlog_articulo());
 
@@ -124,6 +128,29 @@ public class PostgreSQLArticuloDAO implements ArticuloDAO {
 
 		jdbcTemplate.update(DELETE_ALL_SQL, params);
 
+	}
+
+	public void meGustaArticulo(Long id_articulo, String login_usuario) {
+		SqlParameterSource params = new MapSqlParameterSource().addValue(
+				"id_articulo", id_articulo).addValue("login_usuario",
+				login_usuario);
+
+		jdbcTemplate.update(CREATE_MEGUSTA_SQL, params);
+		params=new MapSqlParameterSource().addValue(
+				"id_articulo", id_articulo);
+		jdbcTemplate.update(INCREASE_MEGUSTA_SQL, params);
+	}
+
+	public boolean findUsuarioGustaArticulo(Long id_articulo,
+			String login_usuario) {
+		SqlParameterSource params = new MapSqlParameterSource().addValue(
+				"id_articulo", id_articulo).addValue("login_usuario",
+				login_usuario);
+		boolean bool = false;
+		if (jdbcTemplate.queryForObject(GET_MEGUSTA_SQL, params, Integer.class) > 0) {
+			bool = true;
+		}
+		return bool;
 	}
 
 }

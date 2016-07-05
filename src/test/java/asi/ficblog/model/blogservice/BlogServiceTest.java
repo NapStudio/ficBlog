@@ -57,7 +57,7 @@ public class BlogServiceTest {
 
 		addedBlog = blogService.crearBlog(blog);
 		Blog foundBlog = blogService.buscarBlog(addedBlog.getId_blog());
-//		foundBlog=addedBlog;
+
 
 
 		assertEquals(addedBlog, foundBlog);
@@ -260,45 +260,45 @@ public class BlogServiceTest {
 		Assert.assertNull(blogService.buscarEnlace(enlace.getId_enlace()));
 	}
 ////TODO: problema con fechas
-//	@Test
-//	public void testGetEntradas() throws InstanceNotFoundException, InputValidationException {
-//		Blog blog1 = getValidBlog();
-//		try {
-//
-//			List<Entrada> lista_entradas = new ArrayList<Entrada>();
-//
-//			System.out.println(lista_entradas.toString() + "131231");
-//
-//			Entrada entrada1 = blogService.crearArticulo("prueba1", "prueba prueba", blog1.getId_blog());
-//			Entrada entrada2 = blogService.crearEnlace("prueba2", "www.enalce.com", "foto", blog1.getId_blog());
-//			Entrada entrada3 = blogService.crearEnlace("prueba3", "www.enalce.com", "foto", blog1.getId_blog());
-//			Entrada entrada4 = blogService.crearArticulo("prueba4", "prueba prueba", blog1.getId_blog());
-//			Entrada entrada5 = blogService.crearArticulo("prueba5", "prueba prueba", blog1.getId_blog());
-//			Entrada entrada6 = blogService.crearEnlace("prueba6", "www.enalce.com", "foto", blog1.getId_blog());
-//			Entrada entrada7 = blogService.crearArticulo("prueba7", "prueba prueba", blog1.getId_blog());
-//			Entrada entrada8 = blogService.crearEnlace("prueba8", "www.enalce.com", "foto", blog1.getId_blog());
-//
-//			lista_entradas.add(entrada7);
-//			lista_entradas.add(entrada3);
-//			lista_entradas.add(entrada2);
-//			lista_entradas.add(entrada5);
-//			lista_entradas.add(entrada6);
-//			lista_entradas.add(entrada4);
-//			lista_entradas.add(entrada1);
-//			lista_entradas.add(entrada8);
-//
-//			Collections.sort(lista_entradas);
-//			 for (Entrada entrada : lista_entradas) {
-//					System.out.println(entrada);
-//				}
-//
-//			List<Entrada> lista_entradas2 = blogService.buscarEntradas(blog1);
-//			Assert.assertTrue(lista_entradas.equals(lista_entradas2));
-//		} finally {
-//			blogService.eliminarEntradasBlog(blog1.getId_blog());
-//		}
-//
-//	}
+	@Test
+	public void testGetEntradas() throws InstanceNotFoundException, InputValidationException {
+		Blog blog1 = getValidBlog();
+		try {
+
+			List<Entrada> lista_entradas = new ArrayList<Entrada>();
+
+			System.out.println(lista_entradas.toString() + "131231");
+
+			Entrada entrada1 = blogService.crearArticulo("prueba1", "prueba prueba", blog1.getId_blog());
+			Entrada entrada2 = blogService.crearEnlace("prueba2", "www.enalce.com", "foto", blog1.getId_blog());
+			Entrada entrada3 = blogService.crearEnlace("prueba3", "www.enalce.com", "foto", blog1.getId_blog());
+			Entrada entrada4 = blogService.crearArticulo("prueba4", "prueba prueba", blog1.getId_blog());
+			Entrada entrada5 = blogService.crearArticulo("prueba5", "prueba prueba", blog1.getId_blog());
+			Entrada entrada6 = blogService.crearEnlace("prueba6", "www.enalce.com", "foto", blog1.getId_blog());
+			Entrada entrada7 = blogService.crearArticulo("prueba7", "prueba prueba", blog1.getId_blog());
+			Entrada entrada8 = blogService.crearEnlace("prueba8", "www.enalce.com", "foto", blog1.getId_blog());
+
+			lista_entradas.add(entrada7);
+			lista_entradas.add(entrada3);
+			lista_entradas.add(entrada2);
+			lista_entradas.add(entrada5);
+			lista_entradas.add(entrada6);
+			lista_entradas.add(entrada4);
+			lista_entradas.add(entrada1);
+			lista_entradas.add(entrada8);
+
+			Collections.sort(lista_entradas);
+			 for (Entrada entrada : lista_entradas) {
+					System.out.println(entrada);
+				}
+
+			List<Entrada> lista_entradas2 = blogService.buscarEntradas(blog1.getId_blog());
+			Assert.assertTrue(lista_entradas.equals(lista_entradas2));
+		} finally {
+			blogService.eliminarEntradasBlog(blog1.getId_blog());
+		}
+
+	}
 
 	@Test
 	public void testGetBlogs() throws InstanceNotFoundException, InputValidationException {
@@ -325,10 +325,10 @@ public class BlogServiceTest {
 			Blog encontrado=blogService.buscarBlog(blog1.getId_blog());
 			System.out.println(encontrado);
 			Assert.assertTrue(lista.contains(encontrado));
-//			Assert.assertTrue(lista.contains(blog2));
-//			Assert.assertTrue(lista.contains(blog3));
-//			Assert.assertTrue(lista.contains(blog4));
-//			Assert.assertTrue(lista.contains(blog5));
+			Assert.assertTrue(lista.contains(blog2));
+			Assert.assertTrue(lista.contains(blog3));
+			Assert.assertTrue(lista.contains(blog4));
+			Assert.assertTrue(lista.contains(blog5));
 		} finally {
 			blogService.eliminarBlog(blog1.getId_blog());
 			blogService.eliminarBlog(blog2.getId_blog());

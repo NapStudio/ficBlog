@@ -1,5 +1,6 @@
 package asi.ficblog.model.articulo;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,7 +18,7 @@ public class Articulo extends Entrada{
 	}
 	
 	
-	public Articulo(Long id_articulo, String titulo_articulo, Date fecha_publicacion_articulo, String texto_articulo, boolean me_gusta_articulo,
+	public Articulo(Long id_articulo, String titulo_articulo, Calendar fecha_publicacion_articulo, String texto_articulo, int me_gusta_articulo,
 			Long blog_articulo) {
 		super(fecha_publicacion_articulo, me_gusta_articulo, titulo_articulo);
 		this.id_articulo = id_articulo;
@@ -26,9 +27,9 @@ public class Articulo extends Entrada{
 	}
 
 	
-	public Articulo(String titulo_articulo, Date fecha_publicacion_articulo, String texto_articulo,
+	public Articulo(String titulo_articulo, Calendar date, String texto_articulo,
 			Long blog_articulo) {
-		super(fecha_publicacion_articulo, titulo_articulo);
+		super(date, titulo_articulo);
 		this.texto_articulo = texto_articulo;
 		this.blog_articulo = blog_articulo;
 	}
@@ -109,7 +110,7 @@ public class Articulo extends Entrada{
 		return "Articulo [id_articulo=" + id_articulo + ", texto_articulo="
 				+ texto_articulo + ", blog_articulo=" + blog_articulo
 				+ ", getTitulo_entrada()=" + getTitulo_entrada()
-				+ ", isMe_gusta_entrada()=" + isMe_gusta_entrada()
+				+ ", isMe_gusta_entrada()=" + getMe_gusta_entrada()
 				+ ", getFecha_publicacion_entrada()="
 				+ getFecha_publicacion_entrada() + "]";
 	}

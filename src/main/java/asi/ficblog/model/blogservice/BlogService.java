@@ -54,4 +54,7 @@ public interface BlogService {
 	
 	public void eliminarTodosBlogs() throws InstanceNotFoundException;
 	
+	public void meGustaArticulo(Long id_articulo, String login_usuario) throws InstanceNotFoundException;
+	
+	public void meGustaEnlace(Long id_enlace, String login_usuario) throws InstanceNotFoundException;
 }

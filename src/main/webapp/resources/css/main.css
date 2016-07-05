@@ -13,7 +13,7 @@ body {
 	height: 120px;
 	line-height: 120px; 
 	margin: 0 auto;
-	color: #ddeedd;
+	color: #dddddd;
 }
 
 /* Menu */
@@ -51,14 +51,15 @@ body {
 /* Content */ 
 #contentwrapper, #content {
 	background-color: #FFFFFF;
-	height: 20%;
+	height: 80%;
 	
 }
 
 #content {
+	width: 960px;
 	height: auto;
 	margin: 0 auto;
-	padding: 10px;
+	padding: 20px;
 }
 
 #content table {
@@ -68,13 +69,13 @@ body {
 
 /* Footer */
 #footerwrapper, #footer {
-	margin-top: 100px: 
 	height: 30px;
 	float: bottom;
 }
 
 #footer {
-    clear:both;
+	width: 960px;
+	margin: 0 auto;
 	line-height: 30px;
 	color: #dddddd;
 }
@@ -110,5 +111,3 @@ form .field {
 	margin: 4px 0;
 	color: red;
 }
-
-h1 {text-align:center;}

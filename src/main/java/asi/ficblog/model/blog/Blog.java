@@ -1,6 +1,6 @@
 package asi.ficblog.model.blog;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -8,8 +8,8 @@ public class Blog implements Comparable<Blog>{
 	
 	private Long id_blog;
 	private String titulo_blog;
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date fecha_creacion_blog;
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+	private Calendar fecha_creacion_blog;
 	private String usuario_blog;
 	
 	public Blog(){
@@ -17,7 +17,7 @@ public class Blog implements Comparable<Blog>{
 	}
 	
 
-	public Blog(Long id_blog, String titulo_blog, Date fecha_creacion_blog, String usuario_blog) {
+	public Blog(Long id_blog, String titulo_blog, Calendar fecha_creacion_blog, String usuario_blog) {
 		super();
 		this.id_blog = id_blog;
 		this.titulo_blog = titulo_blog;
@@ -25,7 +25,7 @@ public class Blog implements Comparable<Blog>{
 		this.usuario_blog = usuario_blog;
 	}
 	
-	public Blog(String titulo_blog, Date fecha_creacion_blog, String usuario_blog) {
+	public Blog(String titulo_blog, Calendar fecha_creacion_blog, String usuario_blog) {
 		super();
 		this.titulo_blog = titulo_blog;
 		this.fecha_creacion_blog = fecha_creacion_blog;
@@ -44,10 +44,10 @@ public class Blog implements Comparable<Blog>{
 	public void setTitulo_blog(String titulo_blog) {
 		this.titulo_blog = titulo_blog;
 	}
-	public Date getFecha_creacion_blog() {
+	public Calendar getFecha_creacion_blog() {
 		return fecha_creacion_blog;
 	}
-	public void setFecha_creacion_blog(Date fecha_creacion_blog) {
+	public void setFecha_creacion_blog(Calendar fecha_creacion_blog) {
 		this.fecha_creacion_blog = fecha_creacion_blog;
 	}
 	public String getUsuario_blog() {

@@ -1,10 +1,12 @@
 -- All tables are dropped before creating them again
 
 DROP TABLE IF EXISTS UserRoles;
+DROP TABLE IF EXISTS megusta;
 DROP TABLE IF EXISTS articulo;
 DROP TABLE IF EXISTS enlace;
 DROP TABLE IF EXISTS blog;
 DROP TABLE IF EXISTS usuario;
+DROP TABLE IF EXISTS megusta;
 
 -- Usuario
 
@@ -25,7 +27,7 @@ CREATE TABLE UserRoles (
 	login_usuario VARCHAR(20),
 	role VARCHAR(32),
 	CONSTRAINT UserRoles_pk PRIMARY KEY (userRoleId),
-	CONSTRAINT UserRoles_login_kf FOREIGN KEY (login_usuario) REFERENCES usuario(login_usuario)
+	CONSTRAINT UserRoles_login_kf FOREIGN KEY (login_usuario) REFERENCES usuario(login_usuario)  ON DELETE CASCADE
 );
 
 
@@ -39,7 +41,7 @@ CREATE TABLE blog (
 	fecha_creacion_blog TIMESTAMP NOT NULL,
 	usuario_blog VARCHAR(20),
 	CONSTRAINT blog_pk PRIMARY KEY (id_blog),
-	CONSTRAINT blog_fk FOREIGN KEY (usuario_blog) REFERENCES usuario(login_usuario)
+	CONSTRAINT blog_fk FOREIGN KEY (usuario_blog) REFERENCES usuario(login_usuario)  ON DELETE CASCADE
 );
 
 
@@ -52,10 +54,10 @@ CREATE TABLE articulo (
 	titulo_articulo VARCHAR(100),
 	fecha_publicacion_articulo TIMESTAMP,
 	texto_articulo VARCHAR(1500),
-	me_gusta_articulo BOOLEAN,
+	me_gusta_articulo INTEGER,
 	blog_articulo BIGINT,
 	CONSTRAINT articulo_pk PRIMARY KEY (id_articulo),
-	CONSTRAINT articulo_fk FOREIGN KEY (blog_articulo) REFERENCES blog(id_blog)
+	CONSTRAINT articulo_fk FOREIGN KEY (blog_articulo) REFERENCES blog(id_blog)  ON DELETE CASCADE
 );
 
 -- Enlace
@@ -68,11 +70,21 @@ CREATE TABLE enlace (
 	fecha_publicacion_enlace TIMESTAMP,
 	url_enlace VARCHAR(100),
 	tipo_contenido_enlace VARCHAR(20),
-	me_gusta_enlace BOOLEAN,
+	me_gusta_enlace INTEGER,
 	blog_enlace BIGINT,
 	CONSTRAINT enlace_pk PRIMARY KEY (id_enlace),
-	CONSTRAINT enlace_fk FOREIGN KEY (blog_enlace) REFERENCES blog(id_blog)
+	CONSTRAINT enlace_fk FOREIGN KEY (blog_enlace) REFERENCES blog(id_blog)  ON DELETE CASCADE
 );
 
+-- megusta
+DROP SEQUENCE IF EXISTS megusta_id_seq;
+CREATE SEQUENCE megusta_id_seq;
 
+CREATE TABLE megusta (
+	id_megusta BIGINT DEFAULT NEXTVAL('blog_id_seq'),
+	id_enlace  BIGINT REFERENCES enlace(id_enlace)  ON DELETE CASCADE,
+	id_articulo BIGINT REFERENCES articulo(id_articulo)  ON DELETE CASCADE,
+	login_usuario VARCHAR(20) REFERENCES usuario(login_usuario)  ON DELETE CASCADE,
+	CONSTRAINT megusta_pk PRIMARY KEY (id_megusta)
+);
 

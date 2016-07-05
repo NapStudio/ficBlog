@@ -1,8 +1,7 @@
 package asi.ficblog.model.enlace;
 
-import java.util.Date;
+import java.util.Calendar;
 
-import org.springframework.format.annotation.DateTimeFormat;
 
 import asi.ficblog.model.entrada.Entrada;
 
@@ -18,8 +17,8 @@ public class Enlace extends Entrada{
 	}
 	
 
-	public Enlace(Long id_enlace, String titulo_enlace, Date fecha_publicacion_enlace, String url_enlace,
-			String tipo_contenido, boolean me_gusta_enlace, Long blog_enlace) {
+	public Enlace(Long id_enlace, String titulo_enlace, Calendar fecha_publicacion_enlace, String url_enlace,
+			String tipo_contenido, int me_gusta_enlace, Long blog_enlace) {
 		super(fecha_publicacion_enlace, me_gusta_enlace, titulo_enlace);
 		this.id_enlace = id_enlace;
 		this.url_enlace = url_enlace;
@@ -27,7 +26,7 @@ public class Enlace extends Entrada{
 		this.blog_enlace = blog_enlace;
 	}
 	
-	public Enlace(String titulo_enlace, Date fecha_publicacion_enlace, String url_enlace,
+	public Enlace(String titulo_enlace, Calendar fecha_publicacion_enlace, String url_enlace,
 			String tipo_contenido, Long blog_enlace) {
 		super(fecha_publicacion_enlace, titulo_enlace);
 		this.url_enlace = url_enlace;
@@ -125,60 +124,13 @@ public class Enlace extends Entrada{
 		return "Enlace [id_enlace=" + id_enlace + ", url_enlace=" + url_enlace
 				+ ", tipo_contenido_enlace=" + tipo_contenido_enlace
 				+ ", blog_enlace=" + blog_enlace + ", getTitulo_entrada()="
-				+ getTitulo_entrada() + ", isMe_gusta_entrada()="
-				+ isMe_gusta_entrada() + ", getFecha_publicacion_entrada()="
-				+ getFecha_publicacion_entrada() + "]";
+				+ getTitulo_entrada() + ", getMe_gusta_entrada()="
+				+ getMe_gusta_entrada() + ", getFecha_publicacion_entrada()="
+				+ getFecha_publicacion_entrada() + ", getClass()=" + getClass()
+				+ ", toString()=" + super.toString() + "]";
 	}
 
 
-
-
-
-
-//
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (this == obj)
-//			return true;
-//		if (getClass() != obj.getClass())
-//			return false;
-//		Enlace other = (Enlace) obj;
-//		if (blog_enlace == null) {
-//			if (other.blog_enlace != null)
-//				return false;
-//		} else if (!blog_enlace.equals(other.blog_enlace))
-//			return false;
-//		String fec1=fecha_publicacion_enlace.toString();
-//		String fec2=other.fecha_publicacion_enlace.toString();
-//		if (fecha_publicacion_enlace == null) {
-//			if (other.fecha_publicacion_enlace != null)
-//				return false;
-//		} else if (!fec1
-//				.equals(fec2))
-//			return false;
-//		if (id_enlace == null) {
-//			if (other.id_enlace != null)
-//				return false;
-//		} else if (!id_enlace.equals(other.id_enlace))
-//			return false;
-//		if (tipo_contenido_enlace == null) {
-//			if (other.tipo_contenido_enlace != null)
-//				return false;
-//		} else if (!tipo_contenido_enlace.equals(other.tipo_contenido_enlace))
-//			return false;
-//		if (titulo_enlace == null) {
-//			if (other.titulo_enlace != null)
-//				return false;
-//		} else if (!titulo_enlace.equals(other.titulo_enlace))
-//			return false;
-//		if (url_enlace == null) {
-//			if (other.url_enlace != null)
-//				return false;
-//		} else if (!url_enlace.equals(other.url_enlace))
-//			return false;
-//		return true;
-//	}
-	
 	
 
 
