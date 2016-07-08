@@ -267,7 +267,6 @@ public class BlogServiceTest {
 
 			List<Entrada> lista_entradas = new ArrayList<Entrada>();
 
-			System.out.println(lista_entradas.toString() + "131231");
 
 			Entrada entrada1 = blogService.crearArticulo("prueba1", "prueba prueba", blog1.getId_blog());
 			Entrada entrada2 = blogService.crearEnlace("prueba2", "www.enalce.com", "foto", blog1.getId_blog());
@@ -289,11 +288,12 @@ public class BlogServiceTest {
 
 			Collections.sort(lista_entradas);
 			 for (Entrada entrada : lista_entradas) {
-					System.out.println(entrada);
 				}
 
 			List<Entrada> lista_entradas2 = blogService.buscarEntradas(blog1.getId_blog());
-			Assert.assertTrue(lista_entradas.equals(lista_entradas2));
+			System.out.println("lista 2"+lista_entradas2);
+			System.out.println("lista 1"+lista_entradas);
+			Assert.assertTrue(lista_entradas.containsAll(lista_entradas2));
 		} finally {
 			blogService.eliminarEntradasBlog(blog1.getId_blog());
 		}

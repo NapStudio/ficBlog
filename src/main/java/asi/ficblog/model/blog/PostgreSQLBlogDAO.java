@@ -1,15 +1,6 @@
 package asi.ficblog.model.blog;
 
-
 import java.util.List;
-
-
-
-
-
-
-
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -25,110 +16,112 @@ import asi.ficblog.model.util.exceptions.InstanceNotFoundException;
 
 @Repository
 public class PostgreSQLBlogDAO implements BlogDAO {
-	
+
 	@Autowired
 	private NamedParameterJdbcOperations jdbcTemplate;
-	
+
 	public void setJdbcTemplate(NamedParameterJdbcOperations jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	private static String CREATE_SQL =
-	"INSERT INTO blog (titulo_blog, fecha_creacion_blog, usuario_blog) " 
-	+ "VALUES (:titulo_blog, :fecha_creacion_blog, :usuario_blog)";
-	
-	private static String UPDATE_SQL =
-	"UPDATE blog SET titulo_blog = :titulo_blog, fecha_creacion_blog = :fecha_creacion_blog, usuario_blog = :usuario_blog "
-	+ "WHERE id_blog = :id_blog";
-	
-	private static String GET_ALL_SQL = 
-			"SELECT id_blog, titulo_blog, fecha_creacion_blog, usuario_blog FROM blog";
+	private static String CREATE_SQL = "INSERT INTO blog (titulo_blog, fecha_creacion_blog, usuario_blog) "
+			+ "VALUES (:titulo_blog, :fecha_creacion_blog, :usuario_blog)";
 
-	
-	private static String GET_SQL = 
-			GET_ALL_SQL+" WHERE id_blog = :id_blog";
-	
-	private static String GET_BYUSUARIO_SQL = 
-			GET_ALL_SQL+" WHERE usuario_blog = :usuario_blog";
+	private static String UPDATE_SQL = "UPDATE blog SET titulo_blog = :titulo_blog, fecha_creacion_blog = :fecha_creacion_blog, usuario_blog = :usuario_blog "
+			+ "WHERE id_blog = :id_blog";
 
-	
-	private static String DELETE_ALL_SQL =
-			"DELETE FROM blog";
-	
-	private static String DELETE_ALLArticulos_SQL =
-			"DELETE FROM articulo";
-	
-	private static String DELETE_ALLEnlaces_SQL =
-			"DELETE FROM enlace";
-	
-	private static String DELETE_SQL =
-			DELETE_ALL_SQL+" WHERE id_blog = :id_blog";
-	
+	private static String GET_ALL_SQL = "SELECT id_blog, titulo_blog, fecha_creacion_blog, usuario_blog FROM blog";
+
+	private static String GET_SQL = GET_ALL_SQL + " WHERE id_blog = :id_blog";
+
+	private static String GET_BYUSUARIO_SQL = GET_ALL_SQL
+			+ " WHERE usuario_blog = :usuario_blog";
+
+	private static String DELETE_ALL_SQL = "DELETE FROM blog";
+
+	private static String DELETE_ALLArticulos_SQL = "DELETE FROM articulo";
+
+	private static String DELETE_ALLEnlaces_SQL = "DELETE FROM enlace";
+
+	private static String DELETE_SQL = DELETE_ALL_SQL
+			+ " WHERE id_blog = :id_blog";
 
 	public Blog insert(Blog blog) {
 
-		SqlParameterSource params = new MapSqlParameterSource().
-				addValue("titulo_blog", blog.getTitulo_blog()).
-				addValue("fecha_creacion_blog",blog.getFecha_creacion_blog()).
-				addValue("usuario_blog", blog.getUsuario_blog());
-			
-			KeyHolder keyHolder = new GeneratedKeyHolder();
-			
-			jdbcTemplate.update(CREATE_SQL, params, keyHolder, new String [] {"id_blog"});
-			
-			blog.setId_blog(keyHolder.getKey().longValue());
-			
-			return blog;		
+		SqlParameterSource params = new MapSqlParameterSource()
+				.addValue("titulo_blog", blog.getTitulo_blog())
+				.addValue("fecha_creacion_blog", blog.getFecha_creacion_blog())
+				.addValue("usuario_blog", blog.getUsuario_blog());
+
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+
+		jdbcTemplate.update(CREATE_SQL, params, keyHolder,
+				new String[] { "id_blog" });
+
+		blog.setId_blog(keyHolder.getKey().longValue());
+
+		return blog;
 	}
-	
-	public Blog update(Blog blog) {
-		
-		SqlParameterSource params = new MapSqlParameterSource().
-				addValue("titulo_articulo", blog.getTitulo_blog()).
-				addValue("titulo_blog", blog.getTitulo_blog()).
-				addValue("fecha_creacion_blog", blog.getFecha_creacion_blog()).
-				addValue("id_blog", blog.getId_blog()).
-				addValue("usuario_blog", blog.getUsuario_blog());
-			
+
+	public Blog update(Blog blog) throws InstanceNotFoundException {
+
+		SqlParameterSource params = new MapSqlParameterSource()
+				.addValue("titulo_articulo", blog.getTitulo_blog())
+				.addValue("titulo_blog", blog.getTitulo_blog())
+				.addValue("fecha_creacion_blog", blog.getFecha_creacion_blog())
+				.addValue("id_blog", blog.getId_blog())
+				.addValue("usuario_blog", blog.getUsuario_blog());
+
+		try {
 			jdbcTemplate.update(UPDATE_SQL, params);
-			
-			return blog;
-		
-	}
-	
-	public Blog find(Long id_blog) throws InstanceNotFoundException {
-		SqlParameterSource params = new MapSqlParameterSource().
-				addValue("id_blog", id_blog);
-		try{
-			return jdbcTemplate.queryForObject(GET_SQL, params,new BlogRowMapper());
-		}catch (EmptyResultDataAccessException e) {
+		} catch (EmptyResultDataAccessException e) {
 			throw new InstanceNotFoundException();
 		}
-			
-		
-	}
-	
-	
 
-	public List<Blog> findByUsuario(String login_usuario) throws InstanceNotFoundException {
-		SqlParameterSource params = new MapSqlParameterSource().
-				addValue("usuario_blog", login_usuario);
-		return jdbcTemplate.query(GET_BYUSUARIO_SQL, params, new BlogRowMapper());		
+		return blog;
+
 	}
-	
+
+	public Blog find(Long id_blog) throws InstanceNotFoundException {
+		SqlParameterSource params = new MapSqlParameterSource().addValue(
+				"id_blog", id_blog);
+		try {
+			return jdbcTemplate.queryForObject(GET_SQL, params,
+					new BlogRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			throw new InstanceNotFoundException();
+		}
+
+	}
+
+	public List<Blog> findByUsuario(String login_usuario)
+			throws InstanceNotFoundException {
+		SqlParameterSource params = new MapSqlParameterSource().addValue(
+				"usuario_blog", login_usuario);
+		try {
+			return jdbcTemplate.query(GET_BYUSUARIO_SQL, params,
+					new BlogRowMapper());
+		} catch (EmptyResultDataAccessException e) {
+			throw new InstanceNotFoundException();
+		}
+	}
+
 	public List<Blog> getAll() {
-		List<Blog> blogs=jdbcTemplate.query(GET_ALL_SQL, new BlogRowMapper());	
+		List<Blog> blogs = jdbcTemplate.query(GET_ALL_SQL, new BlogRowMapper());
 		return blogs;
-	}	
-
-	public void remove(Long id_blog) {		SqlParameterSource params = new MapSqlParameterSource().
-				addValue("id_blog", id_blog);
-		
-		jdbcTemplate.update(DELETE_SQL, params);
 	}
-	
 
-
+	public void remove(Long id_blog) throws InstanceNotFoundException {
+		SqlParameterSource params = new MapSqlParameterSource().addValue(
+				"id_blog", id_blog);
+
+		try {
+			jdbcTemplate.update(DELETE_SQL, params);
+		} catch (EmptyResultDataAccessException e) {
+			throw new InstanceNotFoundException();
+		}
+	}
+
 	public void removeAll() {
 		jdbcTemplate.query(DELETE_ALL_SQL, new BlogRowMapper());
 	}

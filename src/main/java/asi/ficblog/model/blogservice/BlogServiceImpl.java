@@ -59,13 +59,13 @@ public class BlogServiceImpl implements BlogService {
 		return blogDAO.find(id_blog);
 	}
 
-	public void eliminarBlog(Long id_blog) {
+	public void eliminarBlog(Long id_blog) throws InstanceNotFoundException {
 		blogDAO.remove(id_blog);
 
 	}
 
 	public void cambiarTituloBlog(Blog blog, String nuevo_nombre)
-			throws InputValidationException {
+			throws InputValidationException, InstanceNotFoundException {
 		blog.setTitulo_blog(nuevo_nombre);
 		EntityValidator.validarBlog(blog);
 		blogDAO.update(blog);
@@ -185,7 +185,7 @@ public class BlogServiceImpl implements BlogService {
 
 	}
 
-	public void eliminarEnlace(Long id_enlace) {
+	public void eliminarEnlace(Long id_enlace) throws InstanceNotFoundException {
 		enlaceDAO.remove(id_enlace);
 
 	}

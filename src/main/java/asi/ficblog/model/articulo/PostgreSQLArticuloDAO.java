@@ -85,7 +85,11 @@ public class PostgreSQLArticuloDAO implements ArticuloDAO {
 				.addValue("id_articulo", articulo.getId_articulo())
 				.addValue("blog_articulo", articulo.getBlog_articulo());
 
-		jdbcTemplate.update(UPDATE_SQL, params);
+		try {
+			jdbcTemplate.update(UPDATE_SQL, params);
+		} catch (EmptyResultDataAccessException e) {
+			throw new InstanceNotFoundException();
+		}
 
 		return articulo;
 	}
@@ -93,7 +97,6 @@ public class PostgreSQLArticuloDAO implements ArticuloDAO {
 	public Articulo find(Long id_articulo) throws InstanceNotFoundException {
 		SqlParameterSource params = new MapSqlParameterSource().addValue(
 				"id_articulo", id_articulo);
-		System.out.println("find articulo : ");
 		try {
 			return jdbcTemplate.queryForObject(GET_SQL, params,
 					new ArticuloRowMapper());
@@ -103,8 +106,7 @@ public class PostgreSQLArticuloDAO implements ArticuloDAO {
 
 	}
 
-	public List<Articulo> findByBlog(Long blog_articulo)
-			throws InstanceNotFoundException {
+	public List<Articulo> findByBlog(Long blog_articulo) {
 		SqlParameterSource params = new MapSqlParameterSource().addValue(
 				"blog_articulo", blog_articulo);
 		return jdbcTemplate.query(GET_BYBLOG_SQL, params,
@@ -114,19 +116,25 @@ public class PostgreSQLArticuloDAO implements ArticuloDAO {
 
 	public void remove(Long id_articulo) throws InstanceNotFoundException {
 
-		SqlParameterSource params = new MapSqlParameterSource().addValue(
-				"id_articulo", id_articulo);
+		try {
+			SqlParameterSource params = new MapSqlParameterSource().addValue(
+					"id_articulo", id_articulo);
 
-		jdbcTemplate.update(DELETE_SQL, params);
+			jdbcTemplate.update(DELETE_SQL, params);
+		} catch (EmptyResultDataAccessException e) {
+			throw new InstanceNotFoundException();
+		}
 
 	}
 
 	public void removeAll(Long blog_articulo) throws InstanceNotFoundException {
 		SqlParameterSource params = new MapSqlParameterSource().addValue(
 				"blog_articulo", blog_articulo);
-		;
-
-		jdbcTemplate.update(DELETE_ALL_SQL, params);
+		try {
+			jdbcTemplate.update(DELETE_ALL_SQL, params);
+		} catch (EmptyResultDataAccessException e) {
+			throw new InstanceNotFoundException();
+		}
 
 	}
 
@@ -136,8 +144,8 @@ public class PostgreSQLArticuloDAO implements ArticuloDAO {
 				login_usuario);
 
 		jdbcTemplate.update(CREATE_MEGUSTA_SQL, params);
-		params=new MapSqlParameterSource().addValue(
-				"id_articulo", id_articulo);
+		params = new MapSqlParameterSource().addValue("id_articulo",
+				id_articulo);
 		jdbcTemplate.update(INCREASE_MEGUSTA_SQL, params);
 	}
 

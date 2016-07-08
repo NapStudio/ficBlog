@@ -19,8 +19,7 @@ public interface EnlaceDAO {
 	 * 
 	 */
 
-	public abstract List<Enlace> findByBlog(Long blog_enlace)
-			throws InstanceNotFoundException;
+	public abstract List<Enlace> findByBlog(Long blog_enlace);
 
 	/**
 	 * Inserta un enlace.
@@ -34,18 +33,16 @@ public interface EnlaceDAO {
 	 * 
 	 * @return
 	 */
-	public abstract Enlace update(Enlace enlace);
+	public abstract Enlace update(Enlace enlace) throws InstanceNotFoundException;
 
 	/**
 	 * Elimina un enlace por su id.
 	 */
-	public abstract void remove(Long id_enlace);
+	public abstract void remove(Long id_enlace) throws InstanceNotFoundException;
 
 	public abstract void removeAll(Long blog_enlace);
 
-	public void meGustaEnlace(Long id_enlace, String login_usuario)
-			throws InstanceNotFoundException;;
+	public void meGustaEnlace(Long id_enlace, String login_usuario);
 
-	public boolean findUsuarioGustaEnlace(Long id_enlace, String login_usuario)
-			throws InstanceNotFoundException;;
+	public boolean findUsuarioGustaEnlace(Long id_enlace, String login_usuario);
 }

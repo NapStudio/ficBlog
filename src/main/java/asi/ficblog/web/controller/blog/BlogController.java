@@ -207,7 +207,7 @@ public class BlogController {
 
 	@RequestMapping(value = "/addEnlace", method = RequestMethod.POST)
 	public String addEnlace(@Validated Enlace enlace, BindingResult result,
-			Model model) throws InputValidationException {
+			Model model) throws InputValidationException, InstanceNotFoundException {
 
 		if (result.hasErrors()) {
 
@@ -217,9 +217,11 @@ public class BlogController {
 		} else {
 
 			blogService.crearEnlace(enlace);
+			Blog blog = blogService.buscarBlog(enlace.getBlog_enlace());
 
 			return "redirect:/blog/getEntradas?id_blog="
-					+ enlace.getBlog_enlace();
+					+ enlace.getBlog_enlace()+ "&usuario_blog="
+							+ blog.getUsuario_blog();
 		}
 	}
 

@@ -32,12 +32,12 @@ public interface BlogDAO {
 	 * Actualiza la información de un blog.
 	 * @return 
 	 */
-	public abstract Blog update(Blog blog);
+	public abstract Blog update(Blog blog) throws InstanceNotFoundException;
 
 	/**
 	 * Elimina un blog por su id.
 	 */
-	public abstract void remove(Long id_blog);
+	public abstract void remove(Long id_blog) throws InstanceNotFoundException ;
 	
 	public abstract List<Blog> getAll();
 	

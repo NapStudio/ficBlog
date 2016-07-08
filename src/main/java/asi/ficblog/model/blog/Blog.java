@@ -60,7 +60,7 @@ public class Blog implements Comparable<Blog>{
 	@Override
 	public String toString() {
 		return "Blog [id_blog=" + id_blog + ", titulo_blog=" + titulo_blog + ", fecha_creacion_blog="
-				+ fecha_creacion_blog + ", usuario_blog=" + usuario_blog + "]";
+				+ fecha_creacion_blog.getTime() + ", usuario_blog=" + usuario_blog + "]";
 	}
 
 	@Override

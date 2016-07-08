@@ -18,9 +18,9 @@ public interface BlogService {
 	
 	public Blog buscarBlog(Long id_blog) throws InstanceNotFoundException, InputValidationException;
 	
-	public void eliminarBlog(Long id_blog) throws InputValidationException;
+	public void eliminarBlog(Long id_blog) throws InputValidationException, InstanceNotFoundException;
 
-	public void cambiarTituloBlog(Blog blog, String nuevo_nombre) throws InputValidationException;
+	public void cambiarTituloBlog(Blog blog, String nuevo_nombre) throws InputValidationException, InstanceNotFoundException;
 	
 	public Articulo crearArticulo(String titulo_articulo, String texto_articulo, Long id_blog) throws InputValidationException;
 	
@@ -46,7 +46,7 @@ public interface BlogService {
 	
 	public void eliminarArticulo(Long id_articulo) throws InputValidationException, InstanceNotFoundException;
 	
-	public void eliminarEnlace(Long id_enlace) throws InputValidationException;
+	public void eliminarEnlace(Long id_enlace) throws InputValidationException, InstanceNotFoundException;
 	
 	public void eliminarEntradasBlog(Long id_blog) throws InputValidationException, InstanceNotFoundException;
 	

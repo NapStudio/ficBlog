@@ -74,7 +74,7 @@ public class PostgreSQLEnlaceDAO implements EnlaceDAO {
 		return enlace;
 	}
 
-	public Enlace update(Enlace enlace) {
+	public Enlace update(Enlace enlace) throws InstanceNotFoundException {
 		SqlParameterSource params = new MapSqlParameterSource()
 				.addValue("titulo_enlace", enlace.getTitulo_entrada())
 				.addValue("fecha_publicacion_enlace",
@@ -85,7 +85,11 @@ public class PostgreSQLEnlaceDAO implements EnlaceDAO {
 				.addValue("id_enlace", enlace.getId_enlace())
 				.addValue("blog_enlace", enlace.getBlog_enlace());
 
-		jdbcTemplate.update(UPDATE_SQL, params);
+		try {
+			jdbcTemplate.update(UPDATE_SQL, params);
+		} catch (EmptyResultDataAccessException e) {
+			throw new InstanceNotFoundException();
+		}
 
 		return enlace;
 	}
@@ -101,8 +105,7 @@ public class PostgreSQLEnlaceDAO implements EnlaceDAO {
 		}
 	}
 
-	public List<Enlace> findByBlog(Long blog_enlace)
-			throws InstanceNotFoundException {
+	public List<Enlace> findByBlog(Long blog_enlace) {
 		SqlParameterSource params = new MapSqlParameterSource().addValue(
 				"blog_enlace", blog_enlace);
 
@@ -110,11 +113,15 @@ public class PostgreSQLEnlaceDAO implements EnlaceDAO {
 				.query(GET_BYBLOG_SQL, params, new EnlaceRowMapper());
 	}
 
-	public void remove(Long id_enlace) {
+	public void remove(Long id_enlace) throws InstanceNotFoundException {
 		SqlParameterSource params = new MapSqlParameterSource().addValue(
 				"id_enlace", id_enlace);
+		try {
 
-		jdbcTemplate.update(DELETE_SQL, params);
+			jdbcTemplate.update(DELETE_SQL, params);
+		} catch (EmptyResultDataAccessException e) {
+			throw new InstanceNotFoundException();
+		}
 	}
 
 	public void removeAll(Long blog_enlace) {

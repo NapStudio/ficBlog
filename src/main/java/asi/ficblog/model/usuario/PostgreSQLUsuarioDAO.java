@@ -77,7 +77,11 @@ public class PostgreSQLUsuarioDAO implements UsuarioDAO {
 				.addValue("nick_usuario", usuario.getNick_usuario())
 				.addValue("login_usuario", usuario.getLogin_usuario());
 
-		jdbcTemplate.update(UPDATE_SQL, params);
+		try {
+			jdbcTemplate.update(UPDATE_SQL, params);
+		} catch (EmptyResultDataAccessException e) {
+			throw new InstanceNotFoundException();
+		}
 		System.out.println("update DAO");
 		return usuario;
 	}
@@ -110,16 +114,20 @@ public class PostgreSQLUsuarioDAO implements UsuarioDAO {
 		SqlParameterSource params = new MapSqlParameterSource().addValue(
 				"login_usuario", login_usuario);
 
-		jdbcTemplate.update(DELETE_USERROLES_SQL, params);
+		try {
+			jdbcTemplate.update(DELETE_USERROLES_SQL, params);
+		} catch (EmptyResultDataAccessException e) {
+			throw new InstanceNotFoundException();
+		}
 		removeRole(login_usuario);
 	}
-	
-	public void removeRole(String login_usuario){
+
+	public void removeRole(String login_usuario) {
 
 		SqlParameterSource params = new MapSqlParameterSource().addValue(
 				"login_usuario", login_usuario);
 		jdbcTemplate.update(DELETE_SQL, params);
-		
+
 	}
 
 }

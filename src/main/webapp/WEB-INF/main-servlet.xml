@@ -93,12 +93,14 @@
 		<sec:intercept-url pattern="/blog/**"
 			access="hasRole('ROLE_AUTHENTICATED')" />
 
+		<sec:intercept-url pattern="/usuario/**"
+			access="hasRole('ROLE_AUTHENTICATED')" />
+
 		<!-- access denied page -->
 		<sec:access-denied-handler error-page="/403" />
 
 		<sec:form-login login-page="/login" default-target-url="/"
-			authentication-failure-url="/login?error" 
-			username-parameter="login_usuario"
+			authentication-failure-url="/login?error" username-parameter="login_usuario"
 			password-parameter="contrasinal_usuario" />
 
 		<sec:logout logout-url="/logout" logout-success-url="/" />

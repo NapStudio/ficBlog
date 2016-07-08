@@ -27,8 +27,7 @@ public interface ArticuloDAO {
 	 * 
 	 */
 
-	public abstract List<Articulo> findByBlog(Long blog_articulo)
-			throws InstanceNotFoundException;
+	public abstract List<Articulo> findByBlog(Long blog_articulo);
 
 	/**
 	 * Actualiza la información de un articulo.
@@ -48,7 +47,7 @@ public interface ArticuloDAO {
 	public abstract void removeAll(Long blog_articulo)
 			throws InstanceNotFoundException;
 
-	public void meGustaArticulo(Long id_articulo, String login_usuario)throws InstanceNotFoundException;;
+	public void meGustaArticulo(Long id_articulo, String login_usuario);
 
-	public boolean findUsuarioGustaArticulo(Long id_articulo, String login_usuario)throws InstanceNotFoundException;;
+	public boolean findUsuarioGustaArticulo(Long id_articulo, String login_usuario);
 }

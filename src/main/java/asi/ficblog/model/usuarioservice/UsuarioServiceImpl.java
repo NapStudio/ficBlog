@@ -54,11 +54,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 		try {
 			blogs = blogDAO.findByUsuario(login_usuario);
 		} catch (InstanceNotFoundException e) {
-			//TODO crear excepcion singular
-			e.printStackTrace();
+			throw new InstanceNotFoundException();
 		}
 		if(blogs!=null&&!blogs.isEmpty()){
-			//TODO crear excepcion singular
 			throw new InstanceNotFoundException();
 		}else{
 			usuarioDAO.remove(login_usuario);			
